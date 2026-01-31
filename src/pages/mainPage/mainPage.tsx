@@ -1,10 +1,12 @@
-import { RenderCardElement } from '../renderCardElement/renderCardElement';
+import { RenderCardElement } from '../../components/renderCardElement/renderCardElement';
+import { AppRoute } from '../../const';
+
 
 type MainPageProps = {
   offersCount: number;
 }
 
-export function MainPage({offersCount}: MainPageProps) {
+export function MainPage({offersCount}: MainPageProps): JSX.Element {
   return (
     <body>
       <div className="page page--gray page--main">
@@ -19,7 +21,7 @@ export function MainPage({offersCount}: MainPageProps) {
               <nav className="header__nav">
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
+                    <a className="header__nav-link header__nav-link--profile" href={AppRoute.Favorites}>
                       <div className="header__avatar-wrapper user__avatar-wrapper">
                       </div>
                       <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
@@ -27,7 +29,7 @@ export function MainPage({offersCount}: MainPageProps) {
                     </a>
                   </li>
                   <li className="header__nav-item">
-                    <a className="header__nav-link" href="#">
+                    <a className="header__nav-link" href={AppRoute.Login}>
                       <span className="header__signout">Sign out</span>
                     </a>
                   </li>
