@@ -1,6 +1,6 @@
 export const Settings = {
-  offersCount: 312
-};
+  offersCount: 312,
+}
 
 export enum AppRoute {
   Main = '/',

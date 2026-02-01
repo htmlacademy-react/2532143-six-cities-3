@@ -1,0 +1,32 @@
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+   animation: vibrate 0.3s linear infinite;
+}
+
+.redirect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.redirect:hover {
+  color: blue;
+}
+
+@keyframes vibrate {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0, 0); }
+}
