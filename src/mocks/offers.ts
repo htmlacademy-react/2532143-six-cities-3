@@ -53,7 +53,7 @@ export const offers: Cards = [
     price: 100,
     type: 'Apartment',
     city: {
-      name: 'Amsterdam',
+      name: 'Brussels',
       location: {
         latitude: 52.35514938496378,
         longitude: 4.673877537499948,
@@ -76,7 +76,7 @@ export const offers: Cards = [
     price: 300,
     type: 'Apartment',
     city: {
-      name: 'Amsterdam',
+      name: 'Brussels',
       location: {
         latitude: 52.35514938496378,
         longitude: 4.673877537499948,
