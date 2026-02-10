@@ -7,7 +7,7 @@ type CardsScreenProps = {
 
 function Card(props: CardsScreenProps): JSX.Element {
   const { cards } = props
-  const { id, name, price, type, src, isPremium } = cards
+  const { id, title, price, type, previewImage, isPremium } = cards
 
   function premiumMark() {
     return (
@@ -24,7 +24,7 @@ function Card(props: CardsScreenProps): JSX.Element {
         <a href={AppRoute.Offer}>
           <img
             className="place-card__image"
-            src={src}
+            src={previewImage}
             width="260"
             height="200"
             alt="Place image"
@@ -55,7 +55,7 @@ function Card(props: CardsScreenProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{name}</a>
+          <a href="#">{title}</a>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>

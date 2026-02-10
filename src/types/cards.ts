@@ -1,10 +1,25 @@
 export type CardsType = {
   id: string
-  name: string
+  title: string
   price: number
   type: string
-  src: string
+  city: {
+    name: string
+    location: {
+      latitude: number
+      longitude: number
+      zoom: number
+    }
+  }
+  location: {
+    latitude: number
+    longitude: number
+    zoom: number
+  }
+  isFavorite: boolean
   isPremium: boolean
+  rating: number
+  previewImage: string
 }
 
 export type Cards = CardsType[]
