@@ -6,18 +6,20 @@ import { AuthorizationPage } from '@/pages/authorization-page'
 import { OffersPage } from '@/pages/offers-page'
 import { PrivateRoute } from '@/components/private-route'
 import { FavoritesPage } from '@/pages/favorites-page'
+import { Cards } from './types/cards'
 
 type AppScreenProps = {
   offersCount: number
+  cards: Cards
 }
 
-function App({ offersCount }: AppScreenProps): JSX.Element {
+function App({ offersCount, cards }: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<MainPage offersCount={offersCount} />}
+          element={<MainPage offersCount={offersCount} cards={cards} />}
         />
         <Route path={AppRoute.Login} element={<AuthorizationPage />} />
         <Route path={AppRoute.Offer} element={<OffersPage />} />
