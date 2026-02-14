@@ -8,6 +8,6 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <React.StrictMode>
-    <App offersCount={Settings.offersCount} cards={offers} />
+    <App offersCount={Settings.offersCount} offer={offers} />
   </React.StrictMode>,
 )

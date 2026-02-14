@@ -1,6 +1,6 @@
-import { Cards } from '@/types/cards'
+import { Offer } from '@/types/cards'
 
-export const offers: Cards = [
+export const offers: Offer = [
   {
     id: '1',
     title: 'Beautiful &amp; luxurious room at great location',
@@ -20,7 +20,7 @@ export const offers: Cards = [
       zoom: 8,
     },
     isFavorite: false,
-    isPremium: false,
+    isPremium: true,
     rating: 4,
     previewImage: 'img/room.jpg',
   },
@@ -43,7 +43,7 @@ export const offers: Cards = [
       zoom: 8,
     },
     isFavorite: false,
-    isPremium: false,
+    isPremium: true,
     rating: 4,
     previewImage: 'img/apartment-02.jpg',
   },

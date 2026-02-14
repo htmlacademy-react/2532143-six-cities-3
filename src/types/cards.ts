@@ -1,25 +1,25 @@
-export type CardsType = {
+type Location = {
+  latitude: number
+  longitude: number
+  zoom: number
+}
+
+type City = {
+  name: string
+  location: Location
+}
+
+export type OffersListItem = {
   id: string
   title: string
   price: number
   type: string
-  city: {
-    name: string
-    location: {
-      latitude: number
-      longitude: number
-      zoom: number
-    }
-  }
-  location: {
-    latitude: number
-    longitude: number
-    zoom: number
-  }
+  city: City
+  location: Location
   isFavorite: boolean
   isPremium: boolean
   rating: number
   previewImage: string
 }
 
-export type Cards = CardsType[]
+export type Offer = OffersListItem[]

@@ -1,27 +1,32 @@
 import { AppRoute } from '@/const'
-import { CardsType } from '@/types/cards'
+import { OffersListItem } from '@/types/cards'
+import { Badge } from '@/components/badge'
+import { generatePath, Link } from 'react-router-dom'
+import { FavoritesButton } from '../favorites-button'
 
 type CardsScreenProps = {
-  cards: CardsType
+  offer: OffersListItem
+  onMouseEnter: () => void
+  isSelected?: string | null
 }
 
-function Card(props: CardsScreenProps): JSX.Element {
-  const { cards } = props
-  const { id, title, price, type, previewImage, isPremium } = cards
-
-  function premiumMark() {
-    return (
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
-    )
-  }
+function Card({
+  offer,
+  onMouseEnter,
+  isSelected,
+}: CardsScreenProps): JSX.Element {
+  const { id, title, price, type, previewImage, isPremium } = offer
 
   return (
-    <article className="cities__card place-card" id={id}>
-      {isPremium ? premiumMark() : ''}
+    <article
+      onMouseEnter={onMouseEnter}
+      className="cities__card place-card"
+      id={id}
+      data-selected={isSelected ?? ''}
+    >
+      {isPremium && <Badge text="Premium" />}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href={AppRoute.Offer}>
+        <Link to={generatePath(AppRoute.Offer, { id })}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -29,7 +34,7 @@ function Card(props: CardsScreenProps): JSX.Element {
             height="200"
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -37,12 +42,7 @@ function Card(props: CardsScreenProps): JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          <FavoritesButton />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
@@ -55,7 +55,7 @@ function Card(props: CardsScreenProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{title}</a>
+          <Link to={generatePath(AppRoute.Offer, { id })}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
