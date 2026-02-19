@@ -13,19 +13,19 @@ const RATING_TITLES = {
 function ReviewsRatingForm(): JSX.Element {
   return (
     <div className="reviews__rating-form form__rating">
-      {RATING_VALUES.map((number) => (
-        <Fragment key={number}>
+      {RATING_VALUES.map((value) => (
+        <Fragment key={value}>
           <input
             className="form__rating-input visually-hidden"
             name="rating"
-            value={number}
-            id={`${number}-stars`}
+            value={value}
+            id={`${value}-stars`}
             type="radio"
           />
           <label
-            htmlFor={`${number}-stars`}
+            htmlFor={`${value}-stars`}
             className="reviews__rating-label form__rating-label"
-            title={RATING_TITLES[number]}
+            title={RATING_TITLES[value]}
           >
             <svg className="form__star-image" width="37" height="33">
               <use xlinkHref="#icon-star"></use>
