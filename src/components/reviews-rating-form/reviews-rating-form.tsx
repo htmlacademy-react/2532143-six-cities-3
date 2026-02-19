@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment } from 'react'
 
 const RATING_VALUES = [5, 4, 3, 2, 1] as const
 
@@ -11,15 +11,10 @@ const RATING_TITLES = {
 } as const
 
 function ReviewsRatingForm(): JSX.Element {
-  const [hoveredRating, setHoveredRating] = useState<number | null>(null)
-
   return (
-    <div
-      className="reviews__rating-form form__rating"
-      onMouseLeave={() => setHoveredRating(null)}
-    >
+    <div className="reviews__rating-form form__rating">
       {RATING_VALUES.map((number) => (
-        <div key={number} onMouseEnter={() => setHoveredRating(number)}>
+        <Fragment key={number}>
           <input
             className="form__rating-input visually-hidden"
             name="rating"
@@ -29,18 +24,14 @@ function ReviewsRatingForm(): JSX.Element {
           />
           <label
             htmlFor={`${number}-stars`}
-            className={`reviews__rating-label form__rating-label ${
-              hoveredRating !== null && number <= hoveredRating
-                ? 'is-active'
-                : ''
-            }`}
+            className="reviews__rating-label form__rating-label"
             title={RATING_TITLES[number]}
           >
             <svg className="form__star-image" width="37" height="33">
               <use xlinkHref="#icon-star"></use>
             </svg>
           </label>
-        </div>
+        </Fragment>
       ))}
     </div>
   )
