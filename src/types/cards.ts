@@ -22,4 +22,4 @@ export type OffersListItem = {
   previewImage: string
 }
 
-export type Offer = OffersListItem[]
+export type Offers = OffersListItem[]

@@ -1,6 +1,6 @@
-import { Offer } from '@/types/cards'
+import { Offers } from '@/types/cards'
 
-export const offers: Offer = [
+export const offers: Offers = [
   {
     id: '1',
     title: 'Beautiful &amp; luxurious room at great location',
@@ -44,7 +44,7 @@ export const offers: Offer = [
     },
     isFavorite: false,
     isPremium: true,
-    rating: 4,
+    rating: 5,
     previewImage: 'img/apartment-02.jpg',
   },
   {
@@ -67,7 +67,7 @@ export const offers: Offer = [
     },
     isFavorite: false,
     isPremium: false,
-    rating: 4,
+    rating: 3,
     previewImage: 'img/apartment-03.jpg',
   },
   {
@@ -93,4 +93,17 @@ export const offers: Offer = [
     rating: 4,
     previewImage: 'img/apartment-01.jpg',
   },
+]
+
+export const offerInsideItems = [
+  'Wi-Fi',
+  'Heating',
+  'Kitchen',
+  'Fridge',
+  'Washing machine',
+  'Coffee machine',
+  'Dishwasher',
+  'Towels',
+  'Baby seat',
+  'Cabel TV',
 ]

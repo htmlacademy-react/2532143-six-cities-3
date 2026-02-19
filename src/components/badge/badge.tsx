@@ -1,6 +1,11 @@
-function Badge({ text }: { text: string }): JSX.Element {
+type BadgeProps = {
+  type: 'place-card' | 'offer'
+  text: string
+}
+
+function Badge({ type, text }: BadgeProps): JSX.Element {
   return (
-    <div className="place-card__mark">
+    <div className={`${type}__mark`}>
       <span>{text}</span>
     </div>
   )
