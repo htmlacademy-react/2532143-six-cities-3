@@ -1,6 +1,6 @@
 type FavoritesButtonProps = {
   type: 'place-card' | 'offer'
-  isActive?: boolean
+  cardType: string
 }
 
 const sizes = {
@@ -16,13 +16,15 @@ const sizes = {
 
 function FavoritesButton({
   type,
-  isActive,
+  cardType,
 }: FavoritesButtonProps): JSX.Element {
   const { width, height } = sizes[type]
+  const isActive =
+    cardType === 'favorites-list' ? 'place-card__bookmark-button--active' : ''
 
   return (
     <button
-      className={`${type}__bookmark-button ${isActive ? 'place-card__bookmark-button--active' : ''} button `}
+      className={`${type}__bookmark-button ${isActive} button `}
       type="button"
     >
       <svg className={`${type}__bookmark-icon`} width={width} height={height}>

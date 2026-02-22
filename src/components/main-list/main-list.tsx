@@ -6,7 +6,7 @@ type OffersListProps = {
   offers: Offers
 }
 
-function CardsList({ offers }: OffersListProps): JSX.Element {
+function MainList({ offers }: OffersListProps): JSX.Element {
   const [, setSelectedId] = useState<string | null>(null)
   return (
     <div className="cities__places-list places__list tabs__content">
@@ -16,10 +16,11 @@ function CardsList({ offers }: OffersListProps): JSX.Element {
           offer={item}
           onMouseEnter={() => setSelectedId(item.id)}
           onMouseLeave={() => setSelectedId(null)}
+          cardType="main-list"
         />
       ))}
     </div>
   )
 }
 
-export { CardsList }
+export { MainList }

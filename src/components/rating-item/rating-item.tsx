@@ -10,7 +10,12 @@ const RATING_TITLES = {
   1: 'terribly',
 } as const
 
-function ReviewsRatingForm(): JSX.Element {
+type RatingItemProps = {
+  rating: number
+  onRatingChange: (rating: number) => void
+}
+
+function RatingItem({ rating, onRatingChange }: RatingItemProps): JSX.Element {
   return (
     <div className="reviews__rating-form form__rating">
       {RATING_VALUES.map((value) => (
@@ -21,6 +26,8 @@ function ReviewsRatingForm(): JSX.Element {
             value={value}
             id={`${value}-stars`}
             type="radio"
+            checked={rating === value}
+            onChange={() => onRatingChange(value)}
           />
           <label
             htmlFor={`${value}-stars`}
@@ -37,4 +44,4 @@ function ReviewsRatingForm(): JSX.Element {
   )
 }
 
-export { ReviewsRatingForm }
+export { RatingItem }

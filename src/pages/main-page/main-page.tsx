@@ -1,5 +1,5 @@
 import { Header } from '@/components/header'
-import { CardsList } from '@/components/cards-list'
+import { MainList } from '@/components/main-list'
 import { Offers } from '@/types/cards'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
@@ -27,7 +27,7 @@ function MainPage({ offersCount, offers }: MainPageProps): JSX.Element {
                 {offersCount} places to stay in Amsterdam
               </b>
               <SortList />
-              <CardsList offers={offers} />
+              <MainList offers={offers} />
             </section>
 
             <div className="cities__right-section">

@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ReviewsRatingForm } from '../reviews-rating-form'
+import { RatingItem } from '@/components/rating-item'
 
 function ReviewsForm(): JSX.Element {
-  const [comment, setComment] = useState<string | null>(null)
+  const [comment, setComment] = useState('')
+  const [rating, setRating] = useState(0)
 
   return (
     <form className="reviews__form form" action="#" method="post">
@@ -10,7 +11,7 @@ function ReviewsForm(): JSX.Element {
         Your review
       </label>
 
-      <ReviewsRatingForm />
+      <RatingItem rating={rating} onRatingChange={setRating} />
 
       <textarea
         onChange={(evt) => setComment(evt.target.value)}
