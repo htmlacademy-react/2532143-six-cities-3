@@ -1,49 +1,98 @@
 import { AppRoute } from '@/const'
+import { OffersListItem } from '@/types/cards'
+import { Badge } from '@/components/badge'
+import { generatePath, Link } from 'react-router-dom'
+import { FavoritesButton } from '../favorites-button'
 
-function Card(): JSX.Element {
+type CardsScreenProps = {
+  offer: OffersListItem
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
+  cardType: 'main-list' | 'favorites-list' | 'near'
+}
+
+const classes = {
+  'main-list': 'cities__card place-card',
+  'favorites-list': 'favorites__card place-card',
+  near: 'near-places__card place-card',
+}
+
+const imageClasses = {
+  'main-list': 'cities__image-wrapper place-card__image-wrapper',
+  'favorites-list': 'favorites__image-wrapper place-card__image-wrapper',
+  near: 'near-places__image-wrapper place-card__image-wrapper',
+}
+
+const sizes = {
+  'main-list': {
+    width: 260,
+    height: 200,
+  },
+  'favorites-list': {
+    width: 150,
+    height: 110,
+  },
+  near: {
+    width: 260,
+    height: 200,
+  },
+}
+
+function Card({
+  offer,
+  onMouseEnter,
+  onMouseLeave,
+  cardType,
+}: CardsScreenProps): JSX.Element {
+  const { id, title, price, type, previewImage, isPremium, rating } = offer
+  const ratingPercentage = (rating / 5) * 100
+  const { width, height } = sizes[cardType]
+  const cardInfoClassname =
+    cardType === 'favorites-list'
+      ? 'favorites__card-info place-card__info'
+      : 'place-card__info'
+
   return (
-    <article className="cities__card place-card">
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href={AppRoute.Offer}>
+    <article
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={classes[cardType]}
+      id={id}
+    >
+      {isPremium && <Badge type="place-card" text="Premium" />}
+      <div className={imageClasses[cardType]}>
+        <Link to={generatePath(AppRoute.Offer, { id })}>
           <img
             className="place-card__image"
-            src="img/apartment-01.jpg"
-            width="260"
-            height="200"
+            src={previewImage}
+            width={width}
+            height={height}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
-      <div className="place-card__info">
+      <div className={cardInfoClassname}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;120</b>
+            <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          <FavoritesButton type="place-card" cardType={cardType} />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
             <span
               style={{
-                width: '80%',
+                width: `${ratingPercentage}%`,
               }}
             ></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">Beautiful &amp; luxurious apartment at great location</a>
+          <Link to={generatePath(AppRoute.Offer, { id })}>{title}</Link>
         </h2>
-        <p className="place-card__type">Apartment</p>
+        <p className="place-card__type">{type}</p>
       </div>
     </article>
   )
