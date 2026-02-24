@@ -4,7 +4,13 @@ type Location = {
   zoom: number
 }
 
-type City = {
+export type Point = {
+  name: string
+  latitude: number
+  longitude: number
+}
+
+export type City = {
   name: string
   location: Location
 }
@@ -23,3 +29,4 @@ export type OffersListItem = {
 }
 
 export type Offers = OffersListItem[]
+export type Points = Point[]
