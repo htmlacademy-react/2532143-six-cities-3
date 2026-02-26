@@ -1,16 +1,44 @@
 import { Header } from '@/components/header'
 import { MainList } from '@/components/main-list'
-import { Offers } from '@/types/cards'
+import { City, Offers, OffersListItem, Point, Points } from '@/types/cards'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
 import { Tabs } from '@/components/tabs'
+import { useState } from 'react'
 
 type MainPageProps = {
   offersCount: number
   offers: Offers
+  city: City
+  points: Points
 }
 
-function MainPage({ offersCount, offers }: MainPageProps): JSX.Element {
+function MainPage({
+  offersCount,
+  offers,
+  city,
+  points,
+}: MainPageProps): JSX.Element {
+  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(
+    undefined,
+  )
+  const [, setSelectedId] = useState<string | null>(null)
+
+  const handleCardHover = (offer: OffersListItem, id: string) => {
+    setSelectedId(id)
+    const offerIndex = offers.findIndex(
+      (offerItem) => offerItem.id === offer.id,
+    )
+    if (offerIndex >= 0 && offerIndex < points.length) {
+      setSelectedPoint(points[offerIndex])
+    }
+  }
+
+  const handleCardLeave = () => {
+    setSelectedId(null)
+    setSelectedPoint(undefined)
+  }
+
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -27,11 +55,20 @@ function MainPage({ offersCount, offers }: MainPageProps): JSX.Element {
                 {offersCount} places to stay in Amsterdam
               </b>
               <SortList />
-              <MainList offers={offers} />
+              <MainList
+                offers={offers}
+                onCardHover={handleCardHover}
+                onCardLeave={handleCardLeave}
+              />
             </section>
 
             <div className="cities__right-section">
-              <Map className="cities__map" />
+              <Map
+                className="cities__map"
+                city={city}
+                points={points}
+                selectedPoint={selectedPoint}
+              />
             </div>
           </div>
         </div>
