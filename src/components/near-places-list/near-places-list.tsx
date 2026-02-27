@@ -1,13 +1,19 @@
-import { NearPlacesCard } from '../near-places-card'
+import { Card } from '../card'
+import { Offers } from '@/types/cards'
 
-function NearPlacesList(): JSX.Element {
+type NearPlacesListProps = {
+  offers: Offers
+}
+
+function NearPlacesList({ offers }: NearPlacesListProps): JSX.Element {
+  const nearPlacesCount = 3
   return (
     <section className="near-places places">
       <h2 className="near-places__title">Other places in the neighbourhood</h2>
       <div className="near-places__list places__list">
-        <NearPlacesCard />
-        <NearPlacesCard />
-        <NearPlacesCard />
+        {offers.slice(0, nearPlacesCount).map((offer) => (
+          <Card key={offer.id} offer={offer} cardType="near" />
+        ))}
       </div>
     </section>
   )

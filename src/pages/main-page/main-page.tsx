@@ -1,16 +1,33 @@
 import { Header } from '@/components/header'
 import { MainList } from '@/components/main-list'
-import { Offers } from '@/types/cards'
+import { City, Offers, OffersListItem } from '@/types/cards'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
 import { Tabs } from '@/components/tabs'
+import { useState } from 'react'
 
 type MainPageProps = {
   offersCount: number
   offers: Offers
+  city: City
 }
 
-function MainPage({ offersCount, offers }: MainPageProps): JSX.Element {
+function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
+  const [selectedOffer, setSelectedOffer] = useState<
+    OffersListItem | undefined
+  >(undefined)
+  const [, setSelectedId] = useState<string | null>(null)
+
+  const handleCardHover = (offer: OffersListItem, id: string) => {
+    setSelectedId(id)
+    setSelectedOffer(offer)
+  }
+
+  const handleCardLeave = () => {
+    setSelectedId(null)
+    setSelectedOffer(undefined)
+  }
+
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -27,11 +44,20 @@ function MainPage({ offersCount, offers }: MainPageProps): JSX.Element {
                 {offersCount} places to stay in Amsterdam
               </b>
               <SortList />
-              <MainList offers={offers} />
+              <MainList
+                offers={offers}
+                onCardHover={handleCardHover}
+                onCardLeave={handleCardLeave}
+              />
             </section>
 
             <div className="cities__right-section">
-              <Map className="cities__map" />
+              <Map
+                className="cities__map"
+                city={city}
+                offers={offers}
+                selectedOffer={selectedOffer}
+              />
             </div>
           </div>
         </div>

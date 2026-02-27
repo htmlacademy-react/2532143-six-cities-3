@@ -1,21 +1,25 @@
 import { Card } from '@/components/card'
-import { Offers } from '@/types/cards'
-import { useState } from 'react'
+import { Offers, OffersListItem } from '@/types/cards'
 
 type OffersListProps = {
   offers: Offers
+  onCardHover: (offer: OffersListItem, id: string) => void
+  onCardLeave: () => void
 }
 
-function MainList({ offers }: OffersListProps): JSX.Element {
-  const [, setSelectedId] = useState<string | null>(null)
+function MainList({
+  offers,
+  onCardHover,
+  onCardLeave,
+}: OffersListProps): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((item) => (
         <Card
           key={item.id}
           offer={item}
-          onMouseEnter={() => setSelectedId(item.id)}
-          onMouseLeave={() => setSelectedId(null)}
+          onMouseEnter={() => onCardHover(item, item.id)}
+          onMouseLeave={onCardLeave}
           cardType="main-list"
         />
       ))}
