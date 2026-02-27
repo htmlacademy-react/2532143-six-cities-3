@@ -8,20 +8,17 @@ import { PrivateRoute } from '@/components/private-route'
 import { FavoritesPage } from '@/pages/favorites-page'
 import { Offers } from './types/cards'
 import { City } from './types/cards'
-import { Points } from './types/cards'
 
 type AppScreenProps = {
   offersCount: number
   offers: Offers
   city: City
-  points: Points
 }
 
 function App({
   offersCount,
   offers,
   city,
-  points,
 }: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
@@ -33,7 +30,6 @@ function App({
               offersCount={offersCount}
               offers={offers}
               city={city}
-              points={points}
             />
           }
         />

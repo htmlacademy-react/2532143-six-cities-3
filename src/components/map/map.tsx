@@ -1,16 +1,15 @@
 import clsx from 'clsx'
-import { City } from '@/types/cards'
-import { Point } from '@/types/cards'
+import { City, OffersListItem } from '@/types/cards'
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '@/const'
 import { Icon, layerGroup, Marker } from 'leaflet'
 import { useEffect, useRef } from 'react'
 import useMap from '@/hooks/use-map'
 
 type MapProps = {
-  className?: 'cities__map'
+  className?: string
   city: City
-  points: Point[]
-  selectedPoint: Point | undefined
+  offers: OffersListItem[]
+  selectedOffer?: OffersListItem
 }
 
 const defaultCustomIcon = new Icon({
@@ -28,8 +27,8 @@ const currentCustomIcon = new Icon({
 function Map({
   className,
   city,
-  points,
-  selectedPoint,
+  offers,
+  selectedOffer,
 }: MapProps): JSX.Element {
   const mapRef = useRef(null)
   const map = useMap(mapRef, city)
@@ -37,18 +36,17 @@ function Map({
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map)
-      points.forEach((point) => {
+      offers.forEach((offer) => {
         const marker = new Marker({
-          lat: point.latitude,
-          lng: point.longitude,
+          lat: offer.location.latitude,
+          lng: offer.location.longitude,
         })
 
+        const isSelected =
+          selectedOffer !== undefined && offer.id === selectedOffer.id
+
         marker
-          .setIcon(
-            selectedPoint !== undefined && point.name === selectedPoint.name
-              ? currentCustomIcon
-              : defaultCustomIcon,
-          )
+          .setIcon(isSelected ? currentCustomIcon : defaultCustomIcon)
           .addTo(markerLayer)
       })
 
@@ -56,7 +54,7 @@ function Map({
         map.removeLayer(markerLayer)
       }
     }
-  }, [map, points, selectedPoint])
+  }, [map, offers, selectedOffer])
 
   return <section ref={mapRef} className={clsx('map', className)}></section>
 }

@@ -1,6 +1,6 @@
 import { Header } from '@/components/header'
 import { MainList } from '@/components/main-list'
-import { City, Offers, OffersListItem, Point, Points } from '@/types/cards'
+import { City, Offers, OffersListItem } from '@/types/cards'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
 import { Tabs } from '@/components/tabs'
@@ -10,33 +10,22 @@ type MainPageProps = {
   offersCount: number
   offers: Offers
   city: City
-  points: Points
 }
 
-function MainPage({
-  offersCount,
-  offers,
-  city,
-  points,
-}: MainPageProps): JSX.Element {
-  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(
-    undefined,
-  )
+function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
+  const [selectedOffer, setSelectedOffer] = useState<
+    OffersListItem | undefined
+  >(undefined)
   const [, setSelectedId] = useState<string | null>(null)
 
   const handleCardHover = (offer: OffersListItem, id: string) => {
     setSelectedId(id)
-    const offerIndex = offers.findIndex(
-      (offerItem) => offerItem.id === offer.id,
-    )
-    if (offerIndex >= 0 && offerIndex < points.length) {
-      setSelectedPoint(points[offerIndex])
-    }
+    setSelectedOffer(offer)
   }
 
   const handleCardLeave = () => {
     setSelectedId(null)
-    setSelectedPoint(undefined)
+    setSelectedOffer(undefined)
   }
 
   return (
@@ -66,8 +55,8 @@ function MainPage({
               <Map
                 className="cities__map"
                 city={city}
-                points={points}
-                selectedPoint={selectedPoint}
+                offers={offers}
+                selectedOffer={selectedOffer}
               />
             </div>
           </div>

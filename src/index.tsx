@@ -4,17 +4,11 @@ import { Settings } from './const'
 import App from 'src/app'
 import { offers } from './mocks/offers'
 import { CITY } from './mocks/city'
-import { POINTS } from './mocks/points'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <React.StrictMode>
-    <App
-      offersCount={Settings.offersCount}
-      offers={offers}
-      city={CITY}
-      points={POINTS}
-    />
+    <App offersCount={Settings.offersCount} offers={offers} city={CITY} />
   </React.StrictMode>,
 )
