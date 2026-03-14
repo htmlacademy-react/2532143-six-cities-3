@@ -2,7 +2,7 @@ import { Header } from '@/components/header'
 import { OfferFeatures } from '@/components/offer-features'
 import { OfferGallery } from '@/components/offer-gallery'
 import { OfferInside } from '@/components/offer-inside'
-import { Offers } from '@/types/cards'
+import { Offers, OffersListItem } from '@/types/cards'
 import { useParams } from 'react-router-dom'
 import ErrorPage from '@/pages/error-page/'
 import { NearPlacesList } from '@/components/near-places-list'
@@ -10,6 +10,8 @@ import { Badge } from '@/components/badge'
 import { FavoritesButton } from '@/components/favorites-button'
 import { OfferReviews } from '@/components/offer-reviews'
 import { User } from '@/components/user'
+import { Map } from '@/components/map'
+import { useState } from 'react'
 
 type OfferPageProps = {
   offers: Offers
@@ -18,6 +20,9 @@ type OfferPageProps = {
 function OfferPage({ offers }: OfferPageProps): JSX.Element {
   const { id } = useParams<{ id: string }>()
   const offer = offers.find((item) => item.id === id)
+  const [selectedNearOffer, setSelectedNearOffer] = useState<
+    OffersListItem | undefined
+  >(undefined)
 
   if (!offer) {
     return <ErrorPage />
@@ -25,6 +30,17 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
 
   const { rating, price, title, isPremium } = offer
   const ratingPercentage = (rating / 5) * 100
+
+  const handleCardHover = (nearOffer: OffersListItem) => {
+    setSelectedNearOffer(nearOffer)
+  }
+
+  const handleCardLeave = () => {
+    setSelectedNearOffer(undefined)
+  }
+
+  const nearPlacesCount = 3
+  const nearOffers = offers.slice(0, nearPlacesCount)
 
   return (
     <body>
@@ -82,11 +98,20 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
                 <OfferReviews />
               </div>
             </div>
-            <section className="offer__map map"></section>
+            <Map
+              className="offer__map"
+              city={offer.city}
+              offers={nearOffers}
+              selectedOffer={selectedNearOffer}
+            />
+            <div className="container">
+              <NearPlacesList
+                offers={offers}
+                onCardHover={handleCardHover}
+                onCardLeave={handleCardLeave}
+              />
+            </div>
           </section>
-          <div className="container">
-            <NearPlacesList offers={offers} />
-          </div>
         </main>
       </div>
     </body>
