@@ -1,6 +1,6 @@
-import { Offers } from '@/types/cards'
+import { Offers } from '@/types/offers'
 
-export const offers: Offers = [
+export const mockOffers: Offers = [
   {
     id: '1',
     title: 'Beautiful &amp; luxurious room at great location',

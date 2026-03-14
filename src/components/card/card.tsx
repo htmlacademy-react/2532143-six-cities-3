@@ -1,5 +1,5 @@
 import { AppRoute } from '@/const'
-import { OffersListItem } from '@/types/cards'
+import { OffersListItem } from '@/types/offers'
 import { Badge } from '@/components/badge'
 import { generatePath, Link } from 'react-router-dom'
 import { FavoritesButton } from '../favorites-button'

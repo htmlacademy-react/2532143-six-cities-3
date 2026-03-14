@@ -1,4 +1,4 @@
-import { City } from '@/types/cards'
+import { City } from '@/types/offers'
 
 export const CITY: City = {
   name: 'Amsterdam',
