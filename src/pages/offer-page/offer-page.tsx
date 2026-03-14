@@ -12,6 +12,7 @@ import { OfferReviews } from '@/components/offer-reviews'
 import { User } from '@/components/user'
 import { Map } from '@/components/map'
 import { Reviews, ReviewsItem } from '@/types/reviews'
+import { Rating } from '@/components/rating'
 
 type OfferPageProps = {
   offers: Offers
@@ -21,7 +22,11 @@ type OfferPageProps = {
 
 const nearPlacesCount = 3
 
-function OfferPage({ offers, reviews, reviewsItem }: OfferPageProps): JSX.Element {
+function OfferPage({
+  offers,
+  reviews,
+  reviewsItem,
+}: OfferPageProps): JSX.Element {
   const { id } = useParams<{ id: string }>()
   const currentOffer = offers.find((item) => item.id === id)
 
@@ -30,7 +35,6 @@ function OfferPage({ offers, reviews, reviewsItem }: OfferPageProps): JSX.Elemen
   }
 
   const { rating, price, title, isPremium } = currentOffer
-  const ratingPercentage = (rating / 5) * 100
 
   const nearOffers = offers.slice(0, nearPlacesCount)
 
@@ -52,11 +56,7 @@ function OfferPage({ offers, reviews, reviewsItem }: OfferPageProps): JSX.Elemen
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span
-                    style={{
-                      width: `${ratingPercentage}%`,
-                    }}
-                  ></span>
+                  <Rating rating={rating} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">

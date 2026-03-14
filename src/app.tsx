@@ -35,7 +35,13 @@ function App({
         <Route path={AppRoute.Login} element={<AuthorizationPage />} />
         <Route
           path={AppRoute.Offer}
-          element={<OfferPage offers={offers} reviews={reviews} reviewsItem={reviews[0]} />}
+          element={
+            <OfferPage
+              offers={offers}
+              reviews={reviews}
+              reviewsItem={reviews[0]}
+            />
+          }
         />
         <Route
           path={AppRoute.Favorites}

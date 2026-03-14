@@ -2,6 +2,7 @@ import { ReviewsForm } from '@/components/reviews-form'
 import { User } from '@/components/user'
 import { Reviews } from '@/types/reviews'
 import dayjs from 'dayjs'
+import { Rating } from '../rating'
 
 type OfferReviewsProps = {
   reviews: Reviews
@@ -21,11 +22,7 @@ function OfferReviews({ reviews }: OfferReviewsProps): JSX.Element {
             <div className="reviews__info">
               <div className="reviews__rating rating">
                 <div className="reviews__stars rating__stars">
-                  <span
-                    style={{
-                      width: `${reviewsItem.rating * 20}%`,
-                    }}
-                  ></span>
+                  <Rating rating={reviewsItem.rating} />
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>
