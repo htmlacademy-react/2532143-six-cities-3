@@ -1,36 +1,38 @@
 import { ReviewsForm } from '@/components/reviews-form'
 import { User } from '@/components/user'
+import { Reviews } from '@/types/reviews'
+import dayjs from 'dayjs'
+import { Rating } from '../rating'
 
-function OfferReviews(): JSX.Element {
+type OfferReviewsProps = {
+  reviews: Reviews
+}
+
+function OfferReviews({ reviews }: OfferReviewsProps): JSX.Element {
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
-        Reviews &middot; <span className="reviews__amount">1</span>
+        Reviews &middot;{' '}
+        <span className="reviews__amount">{reviews.length}</span>
       </h2>
       <ul className="reviews__list">
-        <li className="reviews__item">
-          <User name="Max" type="reviews" />
-          <div className="reviews__info">
-            <div className="reviews__rating rating">
-              <div className="reviews__stars rating__stars">
-                <span
-                  style={{
-                    width: '80%',
-                  }}
-                ></span>
-                <span className="visually-hidden">Rating</span>
+        {reviews.map((reviewsItem) => (
+          <li key={reviewsItem.id} className="reviews__item">
+            <User reviewsItem={reviewsItem} type="reviews" />
+            <div className="reviews__info">
+              <div className="reviews__rating rating">
+                <div className="reviews__stars rating__stars">
+                  <Rating rating={reviewsItem.rating} />
+                  <span className="visually-hidden">Rating</span>
+                </div>
               </div>
+              <p className="reviews__text">{reviewsItem.comment}</p>
+              <time className="reviews__time" dateTime={reviewsItem.date}>
+                {dayjs(reviewsItem.date).format('MMMM YYYY')}
+              </time>
             </div>
-            <p className="reviews__text">
-              A quiet cozy and picturesque that hides behind a a river by the
-              unique lightness of Amsterdam. The building is green and from 18th
-              century.
-            </p>
-            <time className="reviews__time" dateTime="2019-04-24">
-              April 2019
-            </time>
-          </div>
-        </li>
+          </li>
+        ))}
       </ul>
       <ReviewsForm />
     </section>

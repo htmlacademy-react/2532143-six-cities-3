@@ -1,6 +1,8 @@
+import type { ReviewsItem } from '../../types/reviews.js'
+
 type UserProps = {
-  name: string
   type: 'offer' | 'reviews'
+  reviewsItem: ReviewsItem
   isPro?: boolean
 }
 
@@ -15,26 +17,28 @@ const sizes = {
   },
 }
 
-function User({ name, type, isPro }: UserProps): JSX.Element {
+function User({ type, reviewsItem, isPro }: UserProps): JSX.Element {
   const { width, height } = sizes[type]
+  const { user } = reviewsItem
+  const isProStatus = isPro ?? user.isPro
 
   return (
     <div
-      className={`${type === 'offer' ? 'offer__host-user' : 'reviews__user'} user ${isPro ? `${type}__user--pro` : ''}`}
+      className={`${type === 'offer' ? 'offer__host-user' : 'reviews__user'} user ${isProStatus ? `${type}__user--pro` : ''}`}
     >
       <div
-        className={`${type}__avatar-wrapper ${isPro ? `${type}__avatar-wrapper--pro` : ''} user__avatar-wrapper`}
+        className={`${type}__avatar-wrapper ${isProStatus ? `${type}__avatar-wrapper--pro` : ''} user__avatar-wrapper`}
       >
         <img
           className={`${type}__avatar user__avatar`}
-          src={`img/avatar-${name.toLowerCase()}.jpg`}
+          src={user.avatarUrl}
           width={width}
           height={height}
           alt={`${type === 'offer' ? 'Host' : 'Reviews'} avatar`}
         />
       </div>
-      <span className={`${type}__user-name`}>{name}</span>
-      {isPro && <span className={`${type}__user-status`}>Pro</span>}
+      <span className={`${type}__user-name`}>{user.name}</span>
+      {isProStatus && <span className={`${type}__user-status`}>Pro</span>}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { Header } from '@/components/header'
 import { MainList } from '@/components/main-list'
-import { City, Offers, OffersListItem } from '@/types/cards'
+import { City, Offers, OffersListItem } from '@/types/offers'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
 import { Tabs } from '@/components/tabs'
@@ -56,7 +56,7 @@ function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
                 className="cities__map"
                 city={city}
                 offers={offers}
-                selectedOffer={selectedOffer}
+                selectedOfferId={selectedOffer?.id}
               />
             </div>
           </div>

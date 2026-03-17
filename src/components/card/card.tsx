@@ -1,8 +1,9 @@
 import { AppRoute } from '@/const'
-import { OffersListItem } from '@/types/cards'
+import { OffersListItem } from '@/types/offers'
 import { Badge } from '@/components/badge'
 import { generatePath, Link } from 'react-router-dom'
 import { FavoritesButton } from '../favorites-button'
+import { Rating } from '../rating'
 
 type CardsScreenProps = {
   offer: OffersListItem
@@ -45,7 +46,6 @@ function Card({
   cardType,
 }: CardsScreenProps): JSX.Element {
   const { id, title, price, type, previewImage, isPremium, rating } = offer
-  const ratingPercentage = (rating / 5) * 100
   const { width, height } = sizes[cardType]
   const cardInfoClassname =
     cardType === 'favorites-list'
@@ -81,11 +81,7 @@ function Card({
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span
-              style={{
-                width: `${ratingPercentage}%`,
-              }}
-            ></span>
+            <Rating rating={rating} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
