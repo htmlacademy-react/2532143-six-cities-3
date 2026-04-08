@@ -1,18 +1,20 @@
 import { Header } from '@/components/header'
 import { MainList } from '@/components/main-list'
-import { City, Offers, OffersListItem } from '@/types/offers'
+import { City, OffersListItem } from '@/types/offers'
 import { SortList } from '@/components/sort-list'
 import { Map } from '@/components/map'
 import { Tabs } from '@/components/tabs'
+import { mockCities } from '@/mocks/cities'
 import { useState } from 'react'
+import { changeCity } from '@/store/action'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { selectCity, selectOffersInCurrentCity } from '@/store/selectors'
 
-type MainPageProps = {
-  offersCount: number
-  offers: Offers
-  city: City
-}
+function MainPage(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const city = useAppSelector(selectCity)
+  const offersInCity = useAppSelector(selectOffersInCurrentCity)
 
-function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
   const [selectedOffer, setSelectedOffer] = useState<
     OffersListItem | undefined
   >(undefined)
@@ -28,24 +30,32 @@ function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
     setSelectedOffer(undefined)
   }
 
+  const handleCityChange = (nextCity: City) => {
+    dispatch(changeCity(nextCity))
+  }
+
   return (
     <div className="page page--gray page--main">
       <Header />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <Tabs />
+        <Tabs
+          cities={mockCities}
+          activeCity={city}
+          onCityChange={handleCityChange}
+        />
 
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">
-                {offersCount} places to stay in Amsterdam
+                {offersInCity.length} places to stay in {city.name}
               </b>
               <SortList />
               <MainList
-                offers={offers}
+                offers={offersInCity}
                 onCardHover={handleCardHover}
                 onCardLeave={handleCardLeave}
               />
@@ -55,7 +65,7 @@ function MainPage({ offersCount, offers, city }: MainPageProps): JSX.Element {
               <Map
                 className="cities__map"
                 city={city}
-                offers={offers}
+                offers={offersInCity}
                 selectedOfferId={selectedOffer?.id}
               />
             </div>

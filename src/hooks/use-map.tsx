@@ -16,7 +16,7 @@ function useMap(
           lat: city.location.latitude,
           lng: city.location.longitude,
         },
-        zoom: 10,
+        zoom: city.location.zoom,
       })
 
       const layer = new TileLayer(
@@ -32,7 +32,20 @@ function useMap(
       setMap(instance)
       isRenderedRef.current = true
     }
-  }, [mapRef, city])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- инициализация один раз; центр при смене города — ниже
+  }, [mapRef])
+
+  useEffect(() => {
+    if (map) {
+      map.setView(
+        {
+          lat: city.location.latitude,
+          lng: city.location.longitude,
+        },
+        city.location.zoom,
+      )
+    }
+  }, [map, city])
 
   return map
 }

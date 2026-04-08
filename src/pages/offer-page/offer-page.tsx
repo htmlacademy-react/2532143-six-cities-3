@@ -2,7 +2,6 @@ import { Header } from '@/components/header'
 import { OfferFeatures } from '@/components/offer-features'
 import { OfferGallery } from '@/components/offer-gallery'
 import { OfferInside } from '@/components/offer-inside'
-import { Offers } from '@/types/offers'
 import { useParams } from 'react-router-dom'
 import ErrorPage from '@/pages/error-page/'
 import { NearPlacesList } from '@/components/near-places-list'
@@ -13,20 +12,18 @@ import { User } from '@/components/user'
 import { Map } from '@/components/map'
 import { Reviews, ReviewsItem } from '@/types/reviews'
 import { Rating } from '@/components/rating'
+import { useAppSelector } from '@/store/hooks'
+import { selectOffers } from '@/store/selectors'
 
 type OfferPageProps = {
-  offers: Offers
   reviews: Reviews
   reviewsItem: ReviewsItem
 }
 
 const nearPlacesCount = 3
 
-function OfferPage({
-  offers,
-  reviews,
-  reviewsItem,
-}: OfferPageProps): JSX.Element {
+function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
+  const offers = useAppSelector(selectOffers)
   const { id } = useParams<{ id: string }>()
   const currentOffer = offers.find((item) => item.id === id)
 
@@ -36,7 +33,13 @@ function OfferPage({
 
   const { rating, price, title, isPremium } = currentOffer
 
-  const nearOffers = offers.slice(0, nearPlacesCount)
+  const nearOffers = offers
+    .filter(
+      (offer) =>
+        offer.id !== currentOffer.id &&
+        offer.city.name === currentOffer.city.name,
+    )
+    .slice(0, nearPlacesCount)
 
   return (
     <div className="page">
