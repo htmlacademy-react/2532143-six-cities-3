@@ -7,7 +7,7 @@ import { Rating } from '../rating'
 
 type CardsScreenProps = {
   offer: OffersListItem
-  onMouseEnter?: () => void
+  onMouseEnter?: (id: string) => void
   onMouseLeave?: () => void
   cardType: 'main-list' | 'favorites-list' | 'near'
 }
@@ -54,7 +54,7 @@ function Card({
 
   return (
     <article
-      onMouseEnter={onMouseEnter}
+      onMouseEnter={() => onMouseEnter?.(id)}
       onMouseLeave={onMouseLeave}
       className={classes[cardType]}
       id={id}
