@@ -1,9 +1,9 @@
 import { Card } from '@/components/card'
-import { Offers, OffersListItem } from '@/types/offers'
+import { Offers } from '@/types/offers'
 
 type OffersListProps = {
   offers: Offers
-  onCardHover: (offer: OffersListItem, id: string) => void
+  onCardHover: (id: string) => void
   onCardLeave: () => void
 }
 
@@ -18,7 +18,7 @@ function MainList({
         <Card
           key={item.id}
           offer={item}
-          onMouseEnter={() => onCardHover(item, item.id)}
+          onMouseEnter={onCardHover}
           onMouseLeave={onCardLeave}
           cardType="main-list"
         />

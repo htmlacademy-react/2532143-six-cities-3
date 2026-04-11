@@ -9,7 +9,7 @@ type MapProps = {
   className?: string
   city: City
   offers: OffersListItem[]
-  selectedOfferId?: OffersListItem['id']
+  selectedOfferId: OffersListItem['id'] | null
 }
 
 const defaultCustomIcon = new Icon({

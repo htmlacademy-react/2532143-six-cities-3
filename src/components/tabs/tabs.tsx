@@ -1,19 +1,25 @@
 import clsx from 'clsx'
 import { City } from '@/types/offers'
+import { useAppDispatch } from '@/store/hooks'
+import { changeCity } from '@/store/reducer'
 
 type TabsProps = {
   cities: City[]
-  activeCity: City
-  onCityChange: (city: City) => void
+  activeCityName: City['name']
 }
 
-function Tabs({ cities, activeCity, onCityChange }: TabsProps): JSX.Element {
+function Tabs({ cities, activeCityName }: TabsProps): JSX.Element {
+  const dispatch = useAppDispatch()
+  const handleCityChange = (nextCity: City) => {
+    dispatch(changeCity(nextCity))
+  }
+
   return (
     <div className="tabs">
       <section className="locations container">
         <ul className="locations__list tabs__list">
           {cities.map((city) => {
-            const isActive = city.name === activeCity.name
+            const isActive = city.name === activeCityName
 
             return (
               <li className="locations__item" key={city.name}>
@@ -26,7 +32,7 @@ function Tabs({ cities, activeCity, onCityChange }: TabsProps): JSX.Element {
                   href="#"
                   onClick={(event) => {
                     event.preventDefault()
-                    onCityChange(city)
+                    handleCityChange(city)
                   }}
                 >
                   <span>{city.name}</span>

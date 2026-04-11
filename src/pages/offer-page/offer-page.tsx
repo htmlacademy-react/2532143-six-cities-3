@@ -95,7 +95,7 @@ function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
             className="offer__map"
             city={currentOffer.city}
             offers={[currentOffer, ...nearOffers]}
-            selectedOfferId={id}
+            selectedOfferId={id ?? null}
           />
           <div className="container">
             <NearPlacesList offers={nearOffers} />

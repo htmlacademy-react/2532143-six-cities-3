@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { DEFAULT_CITY } from '@/const'
 import { City, Offers } from '@/types/offers'
-import { mockDefaultCity } from '@/mocks/cities'
 import { mockOffers } from '@/mocks/offers'
 
 export type SixCitiesState = {
@@ -9,7 +9,7 @@ export type SixCitiesState = {
 }
 
 const initialState: SixCitiesState = {
-  city: mockDefaultCity,
+  city: DEFAULT_CITY,
   offers: mockOffers,
 }
 
