@@ -1,18 +1,23 @@
+import { useState } from 'react'
 import clsx from 'clsx'
 import { Header } from '@/components/header'
-import { MainList } from '@/components/main-list'
 import { MainEmpty } from '@/components/main-empty'
-import { SortList } from '@/components/sort-list'
+import { MainList } from '@/components/main-list'
 import { Map } from '@/components/map'
+import { SortOptions } from '@/components/sort-options'
 import { Tabs } from '@/components/tabs'
 import { CITIES } from '@/const'
-import { useState } from 'react'
 import { useAppSelector } from '@/store/hooks'
-import { selectCity, selectOffersInCurrentCity } from '@/store/selectors'
+import {
+  selectCity,
+  selectOffersInCurrentCity,
+  selectSortedOffersInCurrentCity,
+} from '@/store/selectors'
 
 function MainPage(): JSX.Element {
   const city = useAppSelector(selectCity)
   const offersInCity = useAppSelector(selectOffersInCurrentCity)
+  const sortedOffers = useAppSelector(selectSortedOffersInCurrentCity)
   const hasOffers = offersInCity.length > 0
   const activeCityName = city.name
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -54,9 +59,9 @@ function MainPage(): JSX.Element {
                   <b className="places__found">
                     {offersInCity.length} places to stay in {activeCityName}
                   </b>
-                  <SortList />
+                  <SortOptions />
                   <MainList
-                    offers={offersInCity}
+                    offers={sortedOffers}
                     onCardHover={handleCardHover}
                     onCardLeave={handleCardLeave}
                   />
@@ -66,7 +71,7 @@ function MainPage(): JSX.Element {
                   <Map
                     className="cities__map"
                     city={city}
-                    offers={offersInCity}
+                    offers={sortedOffers}
                     selectedOfferId={selectedId ?? null}
                   />
                 </div>
@@ -74,7 +79,7 @@ function MainPage(): JSX.Element {
             ) : (
               <>
                 <MainEmpty cityName={activeCityName} />
-                <div className="cities__right-section"></div>
+                <div className="cities__right-section" />
               </>
             )}
           </div>
