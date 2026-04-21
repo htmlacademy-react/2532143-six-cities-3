@@ -1,4 +1,5 @@
 import { City } from './types/offers'
+import type { SortOption } from './types/sort'
 
 export enum AppRoute {
   Main = '/',
@@ -13,8 +14,15 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
-export const URL_MARKER_DEFAULT = 'markup/img/pin.svg'
-export const URL_MARKER_CURRENT = 'markup/img/pin-active.svg'
+export const URL_MARKER_DEFAULT = '/img/pin.svg'
+export const URL_MARKER_CURRENT = '/img/pin-active.svg'
+
+export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'popular', label: 'Popular' },
+  { value: 'price-asc', label: 'Price: low to high' },
+  { value: 'price-desc', label: 'Price: high to low' },
+  { value: 'top-rated', label: 'Top rated first' },
+]
 
 export const CITIES: City[] = [
   {
