@@ -9,6 +9,9 @@ export const selectOffers = (state: SixCitiesState) => state.offers
 
 export const selectSort = (state: SixCitiesState) => state.sort
 
+export const selectAreOffersLoading = (state: SixCitiesState) =>
+  state.areOffersLoading
+
 export const selectOffersInCurrentCity = createSelector(
   [selectOffers, selectCity],
   (offers, city) => offers.filter((offer) => offer.city.name === city.name),

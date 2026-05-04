@@ -1,13 +1,17 @@
 import { FavoritesListItem } from '@/components/favorites-list-item'
-import { mockOffers } from '@/mocks/offers'
+import { Offers } from '@/types/offers'
+import { useAppSelector } from '@/store/hooks'
+import { selectOffers } from '@/store/selectors'
 
 function FavoritesList(): JSX.Element {
-  const offersByCity = mockOffers.reduce(
+  const offers = useAppSelector(selectOffers)
+
+  const offersByCity = offers.reduce(
     (acc, offer) => {
       ;(acc[offer.city.name] ||= []).push(offer)
       return acc
     },
-    {} as Record<string, typeof mockOffers>,
+    {} as Record<string, Offers>,
   )
 
   const cityNames = Object.keys(offersByCity)

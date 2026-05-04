@@ -10,10 +10,11 @@ import { FavoritesButton } from '@/components/favorites-button'
 import { OfferReviews } from '@/components/offer-reviews'
 import { User } from '@/components/user'
 import { Map } from '@/components/map'
+import { Spinner } from '@/components/spinner'
 import { Reviews, ReviewsItem } from '@/types/reviews'
 import { Rating } from '@/components/rating'
 import { useAppSelector } from '@/store/hooks'
-import { selectOffers } from '@/store/selectors'
+import { selectAreOffersLoading, selectOffers } from '@/store/selectors'
 
 type OfferPageProps = {
   reviews: Reviews
@@ -24,8 +25,20 @@ const nearPlacesCount = 3
 
 function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
   const offers = useAppSelector(selectOffers)
+  const areOffersLoading = useAppSelector(selectAreOffersLoading)
   const { id } = useParams<{ id: string }>()
   const currentOffer = offers.find((item) => item.id === id)
+
+  if (areOffersLoading) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main">
+          <Spinner />
+        </main>
+      </div>
+    )
+  }
 
   if (!currentOffer) {
     return <ErrorPage />
