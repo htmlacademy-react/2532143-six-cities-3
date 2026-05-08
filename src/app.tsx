@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import { MainPage } from '@/pages/main-page/main-page'
 import ErrorPage from '@/pages/error-page'
@@ -7,12 +8,20 @@ import { OfferPage } from '@/pages/offer-page'
 import { PrivateRoute } from '@/components/private-route'
 import { FavoritesPage } from '@/pages/favorites-page'
 import { Reviews } from './types/reviews'
+import { fetchOffers } from '@/store/reducer'
+import { useAppDispatch } from '@/store/hooks'
 
 type AppProps = {
   reviews: Reviews
 }
 
 function App({ reviews }: AppProps): JSX.Element {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchOffers())
+  }, [dispatch])
+
   return (
     <BrowserRouter>
       <Routes>

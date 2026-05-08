@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+  padding: 2rem;
+}
+
+.circle {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #dfe5ea;
+  border-top-color: #448adc;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
