@@ -9,8 +9,11 @@ export const selectOffers = (state: SixCitiesState) => state.offers
 
 export const selectSort = (state: SixCitiesState) => state.sort
 
-export const selectAreOffersLoading = (state: SixCitiesState) =>
-  state.areOffersLoading
+export const selectIsOffersLoading = (state: SixCitiesState) =>
+  state.isOffersLoading
+
+export const selectHasOffersLoadError = (state: SixCitiesState) =>
+  state.hasOffersLoadError
 
 export const selectOffersInCurrentCity = createSelector(
   [selectOffers, selectCity],

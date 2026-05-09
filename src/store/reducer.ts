@@ -12,14 +12,16 @@ export type SixCitiesState = {
   city: City
   offers: Offers
   sort: SortOption
-  areOffersLoading: boolean
+  isOffersLoading: boolean
+  hasOffersLoadError: boolean
 }
 
 const initialState: SixCitiesState = {
   city: DEFAULT_CITY,
   offers: [],
   sort: 'popular',
-  areOffersLoading: true,
+  isOffersLoading: true,
+  hasOffersLoadError: false,
 }
 
 export const fetchOffers = createAsyncThunk<
@@ -48,14 +50,17 @@ export const sixCitiesSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchOffers.pending, (state) => {
-        state.areOffersLoading = true
+        state.isOffersLoading = true
+        state.hasOffersLoadError = false
       })
       .addCase(fetchOffers.fulfilled, (state, action) => {
-        state.areOffersLoading = false
+        state.isOffersLoading = false
+        state.hasOffersLoadError = false
         state.offers = action.payload
       })
       .addCase(fetchOffers.rejected, (state) => {
-        state.areOffersLoading = false
+        state.isOffersLoading = false
+        state.hasOffersLoadError = true
       })
   },
 })
