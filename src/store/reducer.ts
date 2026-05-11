@@ -4,6 +4,7 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit'
 import type { AxiosInstance } from 'axios'
+import { isAxiosError } from 'axios'
 import { AuthorizationStatus, DEFAULT_CITY, TOKEN_STORAGE_KEY } from '@/const'
 import type { AuthInfo, UserData } from '@/types/auth'
 import { City, Offers } from '@/types/offers'
@@ -16,6 +17,7 @@ export type SixCitiesState = {
   isOffersLoading: boolean
   hasOffersLoadError: boolean
   authorizationStatus: AuthorizationStatus
+  token: string | null
   user: UserData | null
 }
 
@@ -26,6 +28,7 @@ const initialState: SixCitiesState = {
   isOffersLoading: true,
   hasOffersLoadError: false,
   authorizationStatus: AuthorizationStatus.Unknown,
+  token: null,
   user: null,
 }
 
@@ -41,14 +44,25 @@ export const fetchOffers = createAsyncThunk<
 export const checkAuthStatus = createAsyncThunk<
   AuthInfo | null,
   void,
-  { extra: AxiosInstance }
->('sixCities/checkAuth', async (_arg, { extra: api }) => {
+  {
+    extra: AxiosInstance
+    rejectValue: 'unauthorized'
+    state: SixCitiesState
+  }
+>('sixCities/checkAuth', async (_arg, { extra: api, rejectWithValue }) => {
   const token = localStorage.getItem(TOKEN_STORAGE_KEY)
   if (!token) {
     return null
   }
-  const { data } = await api.get<AuthInfo>('/login')
-  return data
+  try {
+    const { data } = await api.get<AuthInfo>('/login')
+    return data
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 401) {
+      return rejectWithValue('unauthorized')
+    }
+    throw error
+  }
 })
 
 export const login = createAsyncThunk<
@@ -87,6 +101,7 @@ export const sixCitiesSlice = createSlice({
     clearAuth(state) {
       localStorage.removeItem(TOKEN_STORAGE_KEY)
       state.authorizationStatus = AuthorizationStatus.NoAuth
+      state.token = null
       state.user = null
     },
   },
@@ -110,11 +125,13 @@ export const sixCitiesSlice = createSlice({
         if (!auth) {
           localStorage.removeItem(TOKEN_STORAGE_KEY)
           state.authorizationStatus = AuthorizationStatus.NoAuth
+          state.token = null
           state.user = null
           return
         }
         localStorage.setItem(TOKEN_STORAGE_KEY, auth.token)
         state.authorizationStatus = AuthorizationStatus.Auth
+        state.token = auth.token
         state.user = {
           name: auth.name,
           avatarUrl: auth.avatarUrl,
@@ -122,7 +139,17 @@ export const sixCitiesSlice = createSlice({
           email: auth.email,
         }
       })
-      .addCase(checkAuthStatus.rejected, (state) => {
+      .addCase(checkAuthStatus.rejected, (state, action) => {
+        if (
+          action.payload === 'unauthorized' &&
+          state.authorizationStatus === AuthorizationStatus.Unknown
+        ) {
+          localStorage.removeItem(TOKEN_STORAGE_KEY)
+          state.authorizationStatus = AuthorizationStatus.NoAuth
+          state.token = null
+          state.user = null
+          return
+        }
         if (state.authorizationStatus === AuthorizationStatus.Unknown) {
           state.authorizationStatus = AuthorizationStatus.NoAuth
         }
@@ -131,6 +158,7 @@ export const sixCitiesSlice = createSlice({
         const auth = action.payload
         localStorage.setItem(TOKEN_STORAGE_KEY, auth.token)
         state.authorizationStatus = AuthorizationStatus.Auth
+        state.token = auth.token
         state.user = {
           name: auth.name,
           avatarUrl: auth.avatarUrl,
@@ -141,6 +169,7 @@ export const sixCitiesSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         localStorage.removeItem(TOKEN_STORAGE_KEY)
         state.authorizationStatus = AuthorizationStatus.NoAuth
+        state.token = null
         state.user = null
       })
   },

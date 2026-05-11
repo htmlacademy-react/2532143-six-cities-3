@@ -27,9 +27,18 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error: unknown) => {
-    if (isAxiosError(error) && error.response?.status === 401) {
+    if (!isAxiosError(error) || error.response?.status !== 401) {
+      return Promise.reject(error)
+    }
+
+    const method = error.config?.method?.toLowerCase() ?? 'get'
+    const url = error.config?.url ?? ''
+    const isLoginCheck = method === 'get' && url.includes('login')
+
+    if (!isLoginCheck) {
       store.dispatch(clearAuth())
     }
+
     return Promise.reject(error)
   },
 )
