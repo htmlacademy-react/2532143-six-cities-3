@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import { MainPage } from '@/pages/main-page/main-page'
 import ErrorPage from '@/pages/error-page'
-import { AppRoute, AuthorizationStatus } from './const'
+import { AppRoute } from './const'
 import { AuthorizationPage } from '@/pages/authorization-page'
 import { OfferPage } from '@/pages/offer-page'
 import { PrivateRoute } from '@/components/private-route'
 import { FavoritesPage } from '@/pages/favorites-page'
 import { Reviews } from './types/reviews'
-import { fetchOffers } from '@/store/reducer'
+import { checkAuthStatus, fetchOffers } from '@/store/reducer'
 import { useAppDispatch } from '@/store/hooks'
 
 type AppProps = {
@@ -19,7 +19,9 @@ function App({ reviews }: AppProps): JSX.Element {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchOffers())
+    void dispatch(checkAuthStatus()).finally(() => {
+      dispatch(fetchOffers())
+    })
   }, [dispatch])
 
   return (
@@ -34,7 +36,7 @@ function App({ reviews }: AppProps): JSX.Element {
         <Route
           path={AppRoute.Favorites}
           element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
+            <PrivateRoute>
               <FavoritesPage />
             </PrivateRoute>
           }

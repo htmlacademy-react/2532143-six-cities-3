@@ -1,15 +1,23 @@
 import { UserNav } from '@/components/user-nav'
 import { Logo } from '@/components/logo'
 
-function Header(): JSX.Element {
+type HeaderProps = {
+  showUserNav?: boolean
+  logoActive?: boolean
+}
+
+function Header({
+  showUserNav = true,
+  logoActive = true,
+}: HeaderProps): JSX.Element {
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Logo type="header" />
+            <Logo type="header" isActive={logoActive} />
           </div>
-          <UserNav />
+          {showUserNav ? <UserNav /> : null}
         </div>
       </div>
     </header>

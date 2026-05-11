@@ -15,6 +15,16 @@ export const selectIsOffersLoading = (state: SixCitiesState) =>
 export const selectHasOffersLoadError = (state: SixCitiesState) =>
   state.hasOffersLoadError
 
+export const selectAuthorizationStatus = (state: SixCitiesState) =>
+  state.authorizationStatus
+
+export const selectUser = (state: SixCitiesState) => state.user
+
+export const selectFavoriteOffersCount = createSelector(
+  selectOffers,
+  (offers) => offers.filter((offer) => offer.isFavorite).length,
+)
+
 export const selectOffersInCurrentCity = createSelector(
   [selectOffers, selectCity],
   (offers, city) => offers.filter((offer) => offer.city.name === city.name),
