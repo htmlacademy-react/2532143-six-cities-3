@@ -6,3 +6,9 @@ export { fetchOffers, fillOffersList } from './slices/offers-slice'
 export type { OffersSliceState } from './slices/offers-slice'
 export { checkAuthStatus, login, logout, clearAuth } from './slices/auth-slice'
 export type { AuthState } from './slices/auth-slice'
+export {
+  fetchOfferPageData,
+  postOfferComment,
+  resetOfferPage,
+} from './slices/offer-page-slice'
+export type { OfferPageState } from './slices/offer-page-slice'

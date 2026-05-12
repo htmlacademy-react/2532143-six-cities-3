@@ -7,15 +7,10 @@ import { AuthorizationPage } from '@/pages/authorization-page'
 import { OfferPage } from '@/pages/offer-page'
 import { PrivateRoute } from '@/components/private-route'
 import { FavoritesPage } from '@/pages/favorites-page'
-import { Reviews } from './types/reviews'
 import { checkAuthStatus, fetchOffers } from '@/store/reducer'
 import { useAppDispatch } from '@/store/hooks'
 
-type AppProps = {
-  reviews: Reviews
-}
-
-function App({ reviews }: AppProps): JSX.Element {
+function App(): JSX.Element {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -29,10 +24,7 @@ function App({ reviews }: AppProps): JSX.Element {
       <Routes>
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route path={AppRoute.Login} element={<AuthorizationPage />} />
-        <Route
-          path={AppRoute.Offer}
-          element={<OfferPage reviews={reviews} reviewsItem={reviews[0]} />}
-        />
+        <Route path={AppRoute.Offer} element={<OfferPage />} />
         <Route
           path={AppRoute.Favorites}
           element={
