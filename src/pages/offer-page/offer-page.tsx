@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { Header } from '@/components/header'
 import { OfferFeatures } from '@/components/offer-features'
 import { OfferGallery } from '@/components/offer-gallery'
@@ -11,10 +12,15 @@ import { OfferReviews } from '@/components/offer-reviews'
 import { User } from '@/components/user'
 import { Map } from '@/components/map'
 import { Spinner } from '@/components/spinner'
+import spinnerStyles from '@/components/spinner/spinner.module.css'
 import { Reviews, ReviewsItem } from '@/types/reviews'
 import { Rating } from '@/components/rating'
 import { useAppSelector } from '@/store/hooks'
-import { selectAreOffersLoading, selectOffers } from '@/store/selectors'
+import {
+  selectHasOffersLoadError,
+  selectIsOffersLoading,
+  selectOffers,
+} from '@/store/selectors'
 
 type OfferPageProps = {
   reviews: Reviews
@@ -25,22 +31,23 @@ const nearPlacesCount = 3
 
 function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
   const offers = useAppSelector(selectOffers)
-  const areOffersLoading = useAppSelector(selectAreOffersLoading)
+  const isOffersLoading = useAppSelector(selectIsOffersLoading)
+  const hasOffersLoadError = useAppSelector(selectHasOffersLoadError)
   const { id } = useParams<{ id: string }>()
   const currentOffer = offers.find((item) => item.id === id)
 
-  if (areOffersLoading) {
+  if (isOffersLoading) {
     return (
       <div className="page">
         <Header />
-        <main className="page__main">
-          <Spinner />
+        <main className={clsx('page__main', spinnerStyles.flexMain)}>
+          <Spinner variant="page" />
         </main>
       </div>
     )
   }
 
-  if (!currentOffer) {
+  if (hasOffersLoadError || !currentOffer) {
     return <ErrorPage />
   }
 

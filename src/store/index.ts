@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { isAxiosError } from 'axios'
 import { createAPI } from '@/api'
-import { reducer, type SixCitiesState } from './reducer'
+import { TOKEN_STORAGE_KEY } from '@/const'
+import { reducer, clearAuth, type SixCitiesState } from './reducer'
 
 export const api = createAPI()
 
@@ -13,6 +15,33 @@ export const store = configureStore({
       },
     }),
 })
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_STORAGE_KEY)
+  if (token && config.headers) {
+    config.headers['X-Token'] = token
+  }
+  return config
+})
+
+api.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (!isAxiosError(error) || error.response?.status !== 401) {
+      return Promise.reject(error)
+    }
+
+    const method = error.config?.method?.toLowerCase() ?? 'get'
+    const url = error.config?.url ?? ''
+    const isLoginCheck = method === 'get' && url.includes('login')
+
+    if (!isLoginCheck) {
+      store.dispatch(clearAuth())
+    }
+
+    return Promise.reject(error)
+  },
+)
 
 export type RootState = SixCitiesState
 export type AppDispatch = typeof store.dispatch

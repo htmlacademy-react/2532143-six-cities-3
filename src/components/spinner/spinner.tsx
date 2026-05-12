@@ -1,9 +1,17 @@
+import clsx from 'clsx'
 import styles from './spinner.module.css'
 
-function Spinner(): JSX.Element {
+type SpinnerProps = {
+  variant?: 'section' | 'page'
+}
+
+function Spinner({ variant = 'section' }: SpinnerProps): JSX.Element {
   return (
     <div
-      className={styles.root}
+      className={clsx(
+        styles.root,
+        variant === 'page' ? styles.page : styles.section,
+      )}
       aria-busy="true"
       aria-live="polite"
       role="status"

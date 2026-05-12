@@ -9,8 +9,23 @@ export const selectOffers = (state: SixCitiesState) => state.offers
 
 export const selectSort = (state: SixCitiesState) => state.sort
 
-export const selectAreOffersLoading = (state: SixCitiesState) =>
-  state.areOffersLoading
+export const selectIsOffersLoading = (state: SixCitiesState) =>
+  state.isOffersLoading
+
+export const selectHasOffersLoadError = (state: SixCitiesState) =>
+  state.hasOffersLoadError
+
+export const selectAuthorizationStatus = (state: SixCitiesState) =>
+  state.authorizationStatus
+
+export const selectUser = (state: SixCitiesState) => state.user
+
+export const selectToken = (state: SixCitiesState) => state.token
+
+export const selectFavoriteOffersCount = createSelector(
+  selectOffers,
+  (offers) => offers.filter((offer) => offer.isFavorite).length,
+)
 
 export const selectOffersInCurrentCity = createSelector(
   [selectOffers, selectCity],

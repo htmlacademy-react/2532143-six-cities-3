@@ -2,8 +2,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 25vh;
   padding: 2rem;
+}
+
+.section {
+  min-height: 25vh;
+}
+
+.page {
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - 120px);
 }
 
 .circle {
@@ -19,4 +28,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.flexMain {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }

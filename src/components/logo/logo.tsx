@@ -1,8 +1,11 @@
+import clsx from 'clsx'
 import { AppRoute } from '@/const'
 import { Link } from 'react-router-dom'
 
 type LogoProps = {
   type: 'header' | 'footer'
+  /** На странице Login логотип без модификатора `--active`. */
+  isActive?: boolean
 }
 
 const sizes = {
@@ -16,13 +19,15 @@ const sizes = {
   },
 }
 
-function Logo({ type }: LogoProps): JSX.Element {
+function Logo({ type, isActive = true }: LogoProps): JSX.Element {
   const { width, height } = sizes[type]
 
   return (
     <Link
       to={AppRoute.Main}
-      className={`${type}__logo-link ${type}__logo-link--active`}
+      className={clsx(`${type}__logo-link`, {
+        [`${type}__logo-link--active`]: isActive,
+      })}
     >
       <img
         className={`${type}__logo`}
