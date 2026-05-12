@@ -17,7 +17,6 @@ export type SixCitiesState = {
   isOffersLoading: boolean
   hasOffersLoadError: boolean
   authorizationStatus: AuthorizationStatus
-  token: string | null
   user: UserData | null
 }
 
@@ -28,8 +27,16 @@ const initialState: SixCitiesState = {
   isOffersLoading: true,
   hasOffersLoadError: false,
   authorizationStatus: AuthorizationStatus.Unknown,
-  token: null,
   user: null,
+}
+
+function userFromAuthInfo(info: AuthInfo): UserData {
+  return {
+    name: info.name,
+    avatarUrl: info.avatarUrl,
+    isPro: info.isPro,
+    email: info.email,
+  }
 }
 
 export const fetchOffers = createAsyncThunk<
@@ -42,7 +49,7 @@ export const fetchOffers = createAsyncThunk<
 })
 
 export const checkAuthStatus = createAsyncThunk<
-  AuthInfo | null,
+  UserData | null,
   void,
   {
     extra: AxiosInstance
@@ -56,9 +63,11 @@ export const checkAuthStatus = createAsyncThunk<
   }
   try {
     const { data } = await api.get<AuthInfo>('/login')
-    return data
+    localStorage.setItem(TOKEN_STORAGE_KEY, data.token)
+    return userFromAuthInfo(data)
   } catch (error) {
     if (isAxiosError(error) && error.response?.status === 401) {
+      localStorage.removeItem(TOKEN_STORAGE_KEY)
       return rejectWithValue('unauthorized')
     }
     throw error
@@ -66,22 +75,20 @@ export const checkAuthStatus = createAsyncThunk<
 })
 
 export const login = createAsyncThunk<
-  AuthInfo,
+  UserData,
   { email: string; password: string },
   { extra: AxiosInstance }
 >('sixCities/login', async ({ email, password }, { extra: api }) => {
   const { data } = await api.post<AuthInfo>('/login', { email, password })
-  return data
+  localStorage.setItem(TOKEN_STORAGE_KEY, data.token)
+  return userFromAuthInfo(data)
 })
 
 export const logout = createAsyncThunk<void, void, { extra: AxiosInstance }>(
   'sixCities/logout',
   async (_arg, { extra: api }) => {
-    try {
-      await api.delete('/logout')
-    } catch {
-      /* ignore */
-    }
+    await api.delete('/logout')
+    localStorage.removeItem(TOKEN_STORAGE_KEY)
   },
 )
 
@@ -98,10 +105,8 @@ export const sixCitiesSlice = createSlice({
     changeSort(state, action: PayloadAction<SortOption>) {
       state.sort = action.payload
     },
-    clearAuth(state) {
-      localStorage.removeItem(TOKEN_STORAGE_KEY)
+    resetAuthState(state) {
       state.authorizationStatus = AuthorizationStatus.NoAuth
-      state.token = null
       state.user = null
     },
   },
@@ -121,32 +126,21 @@ export const sixCitiesSlice = createSlice({
         state.hasOffersLoadError = true
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        const auth = action.payload
-        if (!auth) {
-          localStorage.removeItem(TOKEN_STORAGE_KEY)
+        const user = action.payload
+        if (!user) {
           state.authorizationStatus = AuthorizationStatus.NoAuth
-          state.token = null
           state.user = null
           return
         }
-        localStorage.setItem(TOKEN_STORAGE_KEY, auth.token)
         state.authorizationStatus = AuthorizationStatus.Auth
-        state.token = auth.token
-        state.user = {
-          name: auth.name,
-          avatarUrl: auth.avatarUrl,
-          isPro: auth.isPro,
-          email: auth.email,
-        }
+        state.user = user
       })
       .addCase(checkAuthStatus.rejected, (state, action) => {
         if (
           action.payload === 'unauthorized' &&
           state.authorizationStatus === AuthorizationStatus.Unknown
         ) {
-          localStorage.removeItem(TOKEN_STORAGE_KEY)
           state.authorizationStatus = AuthorizationStatus.NoAuth
-          state.token = null
           state.user = null
           return
         }
@@ -155,26 +149,25 @@ export const sixCitiesSlice = createSlice({
         }
       })
       .addCase(login.fulfilled, (state, action) => {
-        const auth = action.payload
-        localStorage.setItem(TOKEN_STORAGE_KEY, auth.token)
         state.authorizationStatus = AuthorizationStatus.Auth
-        state.token = auth.token
-        state.user = {
-          name: auth.name,
-          avatarUrl: auth.avatarUrl,
-          isPro: auth.isPro,
-          email: auth.email,
-        }
+        state.user = action.payload
       })
       .addCase(logout.fulfilled, (state) => {
-        localStorage.removeItem(TOKEN_STORAGE_KEY)
         state.authorizationStatus = AuthorizationStatus.NoAuth
-        state.token = null
         state.user = null
       })
   },
 })
 
-export const { changeCity, fillOffersList, changeSort, clearAuth } =
-  sixCitiesSlice.actions
+const { resetAuthState } = sixCitiesSlice.actions
+
+export const clearAuth = createAsyncThunk<void, void>(
+  'sixCities/clearAuth',
+  (_, { dispatch }) => {
+    localStorage.removeItem(TOKEN_STORAGE_KEY)
+    dispatch(resetAuthState())
+  },
+)
+
+export const { changeCity, fillOffersList, changeSort } = sixCitiesSlice.actions
 export const reducer = sixCitiesSlice.reducer

@@ -20,8 +20,6 @@ export const selectAuthorizationStatus = (state: SixCitiesState) =>
 
 export const selectUser = (state: SixCitiesState) => state.user
 
-export const selectToken = (state: SixCitiesState) => state.token
-
 export const selectFavoriteOffersCount = createSelector(
   selectOffers,
   (offers) => offers.filter((offer) => offer.isFavorite).length,
