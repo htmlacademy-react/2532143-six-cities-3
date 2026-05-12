@@ -2,12 +2,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import { isAxiosError } from 'axios'
 import { createAPI } from '@/api'
 import { TOKEN_STORAGE_KEY } from '@/const'
-import { reducer, clearAuth, type SixCitiesState } from './reducer'
+import { clearAuth } from './slices/auth-slice'
+import { rootReducer } from './root-reducer'
+
+export type { RootState } from './root-reducer'
 
 export const api = createAPI()
 
 export const store = configureStore({
-  reducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
@@ -43,5 +46,4 @@ api.interceptors.response.use(
   },
 )
 
-export type RootState = SixCitiesState
 export type AppDispatch = typeof store.dispatch
