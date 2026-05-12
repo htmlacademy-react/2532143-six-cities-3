@@ -1,26 +1,24 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { Offers } from '@/types/offers'
 import type { SortOption } from '@/types/sort'
-import type { SixCitiesState } from './reducer'
+import type { RootState } from './root-reducer'
 
-export const selectCity = (state: SixCitiesState) => state.city
+export const selectCity = (state: RootState) => state.app.city
 
-export const selectOffers = (state: SixCitiesState) => state.offers
+export const selectOffers = (state: RootState) => state.offers.offers
 
-export const selectSort = (state: SixCitiesState) => state.sort
+export const selectSort = (state: RootState) => state.app.sort
 
-export const selectIsOffersLoading = (state: SixCitiesState) =>
-  state.isOffersLoading
+export const selectIsOffersLoading = (state: RootState) =>
+  state.offers.isOffersLoading
 
-export const selectHasOffersLoadError = (state: SixCitiesState) =>
-  state.hasOffersLoadError
+export const selectHasOffersLoadError = (state: RootState) =>
+  state.offers.hasOffersLoadError
 
-export const selectAuthorizationStatus = (state: SixCitiesState) =>
-  state.authorizationStatus
+export const selectAuthorizationStatus = (state: RootState) =>
+  state.auth.authorizationStatus
 
-export const selectUser = (state: SixCitiesState) => state.user
-
-export const selectToken = (state: SixCitiesState) => state.token
+export const selectUser = (state: RootState) => state.auth.user
 
 export const selectFavoriteOffersCount = createSelector(
   selectOffers,
