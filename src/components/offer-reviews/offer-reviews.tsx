@@ -1,14 +1,20 @@
 import { ReviewsForm } from '@/components/reviews-form'
 import { User } from '@/components/user'
-import { Reviews } from '@/types/reviews'
+import type { ReviewsItem } from '@/types/reviews'
 import dayjs from 'dayjs'
 import { Rating } from '../rating'
 
 type OfferReviewsProps = {
-  reviews: Reviews
+  reviews: ReviewsItem[]
+  offerId: string
+  isLoggedIn: boolean
 }
 
-function OfferReviews({ reviews }: OfferReviewsProps): JSX.Element {
+function OfferReviews({
+  reviews,
+  offerId,
+  isLoggedIn,
+}: OfferReviewsProps): JSX.Element {
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
@@ -34,7 +40,7 @@ function OfferReviews({ reviews }: OfferReviewsProps): JSX.Element {
           </li>
         ))}
       </ul>
-      <ReviewsForm />
+      {isLoggedIn ? <ReviewsForm offerId={offerId} /> : null}
     </section>
   )
 }

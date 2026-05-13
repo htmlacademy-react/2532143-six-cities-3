@@ -1,44 +1,17 @@
-function OfferGallery(): JSX.Element {
+type OfferGalleryProps = {
+  images: string[]
+}
+
+function OfferGallery({ images }: OfferGalleryProps): JSX.Element {
+  const galleryImages = images.slice(0, 6)
+
   return (
     <div className="offer__gallery">
-      <div className="offer__image-wrapper">
-        <img className="offer__image" src="img/room.jpg" alt="Photo studio" />
-      </div>
-      <div className="offer__image-wrapper">
-        <img
-          className="offer__image"
-          src="img/apartment-01.jpg"
-          alt="Photo studio"
-        />
-      </div>
-      <div className="offer__image-wrapper">
-        <img
-          className="offer__image"
-          src="img/apartment-02.jpg"
-          alt="Photo studio"
-        />
-      </div>
-      <div className="offer__image-wrapper">
-        <img
-          className="offer__image"
-          src="img/apartment-03.jpg"
-          alt="Photo studio"
-        />
-      </div>
-      <div className="offer__image-wrapper">
-        <img
-          className="offer__image"
-          src="img/studio-01.jpg"
-          alt="Photo studio"
-        />
-      </div>
-      <div className="offer__image-wrapper">
-        <img
-          className="offer__image"
-          src="img/apartment-01.jpg"
-          alt="Photo studio"
-        />
-      </div>
+      {galleryImages.map((src) => (
+        <div key={src} className="offer__image-wrapper">
+          <img className="offer__image" src={src} alt="" />
+        </div>
+      ))}
     </div>
   )
 }

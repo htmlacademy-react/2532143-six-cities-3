@@ -49,3 +49,20 @@ export const selectSortedOffersInCurrentCity = createSelector(
   [selectOffersInCurrentCity, selectSort],
   (offers, sort) => sortOffers(offers, sort),
 )
+
+export const selectOfferPageOffer = (state: RootState) => state.offerPage.offer
+
+export const selectOfferPageNearby = (state: RootState) =>
+  state.offerPage.nearbyOffers
+
+export const selectOfferPageReviews = (state: RootState) =>
+  state.offerPage.reviews
+
+export const selectOfferPageLoading = (state: RootState) =>
+  state.offerPage.isLoading
+
+export const selectOfferPageNotFound = (state: RootState) =>
+  state.offerPage.isNotFound
+
+export const selectOfferPageError = (state: RootState) =>
+  state.offerPage.hasError

@@ -1,42 +1,71 @@
 import clsx from 'clsx'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { Badge } from '@/components/badge'
+import { FavoritesButton } from '@/components/favorites-button'
 import { Header } from '@/components/header'
+import { Map } from '@/components/map'
+import { NearPlacesList } from '@/components/near-places-list'
 import { OfferFeatures } from '@/components/offer-features'
 import { OfferGallery } from '@/components/offer-gallery'
 import { OfferInside } from '@/components/offer-inside'
-import { useParams } from 'react-router-dom'
-import ErrorPage from '@/pages/error-page/'
-import { NearPlacesList } from '@/components/near-places-list'
-import { Badge } from '@/components/badge'
-import { FavoritesButton } from '@/components/favorites-button'
 import { OfferReviews } from '@/components/offer-reviews'
-import { User } from '@/components/user'
-import { Map } from '@/components/map'
+import { Rating } from '@/components/rating'
 import { Spinner } from '@/components/spinner'
 import spinnerStyles from '@/components/spinner/spinner.module.css'
-import { Reviews, ReviewsItem } from '@/types/reviews'
-import { Rating } from '@/components/rating'
-import { useAppSelector } from '@/store/hooks'
+import { User } from '@/components/user'
+import { AuthorizationStatus } from '@/const'
+import ErrorPage from '@/pages/error-page/'
+import { fetchOfferPageData, resetOfferPage } from '@/store/reducer'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
-  selectHasOffersLoadError,
-  selectIsOffersLoading,
-  selectOffers,
+  selectAuthorizationStatus,
+  selectOfferPageError,
+  selectOfferPageLoading,
+  selectOfferPageNearby,
+  selectOfferPageNotFound,
+  selectOfferPageOffer,
+  selectOfferPageReviews,
 } from '@/store/selectors'
+import type { OfferHost } from '@/types/offer-detail'
+import type { ReviewsItem } from '@/types/reviews'
 
-type OfferPageProps = {
-  reviews: Reviews
-  reviewsItem: ReviewsItem
+function hostToReviewsStub(host: OfferHost): ReviewsItem {
+  return {
+    id: 'host',
+    date: '',
+    comment: '',
+    rating: 0,
+    user: host,
+  }
 }
 
-const nearPlacesCount = 3
-
-function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
-  const offers = useAppSelector(selectOffers)
-  const isOffersLoading = useAppSelector(selectIsOffersLoading)
-  const hasOffersLoadError = useAppSelector(selectHasOffersLoadError)
+function OfferPage(): JSX.Element {
+  const dispatch = useAppDispatch()
   const { id } = useParams<{ id: string }>()
-  const currentOffer = offers.find((item) => item.id === id)
+  const offer = useAppSelector(selectOfferPageOffer)
+  const nearbyOffers = useAppSelector(selectOfferPageNearby)
+  const reviews = useAppSelector(selectOfferPageReviews)
+  const isLoading = useAppSelector(selectOfferPageLoading)
+  const isNotFound = useAppSelector(selectOfferPageNotFound)
+  const hasError = useAppSelector(selectOfferPageError)
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus)
 
-  if (isOffersLoading) {
+  useEffect(() => {
+    if (!id) {
+      return
+    }
+    void dispatch(fetchOfferPageData(id))
+    return () => {
+      dispatch(resetOfferPage())
+    }
+  }, [dispatch, id])
+
+  if (!id) {
+    return <ErrorPage />
+  }
+
+  if (isLoading) {
     return (
       <div className="page">
         <Header />
@@ -47,20 +76,12 @@ function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
     )
   }
 
-  if (hasOffersLoadError || !currentOffer) {
+  if (isNotFound || hasError || !offer) {
     return <ErrorPage />
   }
 
-  const { rating, price, title, isPremium } = currentOffer
-
-  const nearOffers = offers
-    .filter(
-      (offer) =>
-        offer.id !== currentOffer.id &&
-        offer.city.name === currentOffer.city.name,
-    )
-    .slice(0, nearPlacesCount)
-
+  const isLoggedIn = authorizationStatus === AuthorizationStatus.Auth
+  const hostStub = hostToReviewsStub(offer.host)
   return (
     <div className="page">
       <Header />
@@ -68,57 +89,54 @@ function OfferPage({ reviews, reviewsItem }: OfferPageProps): JSX.Element {
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
-            <OfferGallery />
+            <OfferGallery images={offer.images} />
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              {isPremium && <Badge type="offer" text="Premium" />}
+              {offer.isPremium && <Badge type="offer" text="Premium" />}
               <div className="offer__name-wrapper">
-                <h1 className="offer__name">{title}</h1>
+                <h1 className="offer__name">{offer.title}</h1>
                 <FavoritesButton type="offer" cardType="offer" />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <Rating rating={rating} />
+                  <Rating rating={offer.rating} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
-                  {rating}
+                  {offer.rating}
                 </span>
               </div>
-              <OfferFeatures />
+              <OfferFeatures offer={offer} />
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{price}</b>
+                <b className="offer__price-value">&euro;{offer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
-              <OfferInside />
+              <OfferInside goods={offer.goods} />
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
-                <User reviewsItem={reviewsItem} isPro type="offer" />
+                <User reviewsItem={hostStub} isPro type="offer" />
                 <div className="offer__description">
-                  <p className="offer__text">
-                    A quiet cozy and picturesque that hides behind a a river by
-                    the unique lightness of Amsterdam. The building is green and
-                    from 18th century.
-                  </p>
-                  <p className="offer__text">
-                    An independent House, strategically located between Rembrand
-                    Square and National Opera, but where the bustle of the city
-                    comes to rest in this alley flowery and colorful.
+                  <p className="offer__text" style={{ whiteSpace: 'pre-line' }}>
+                    {offer.description}
                   </p>
                 </div>
               </div>
-              <OfferReviews reviews={reviews} />
+              <OfferReviews
+                reviews={reviews}
+                offerId={offer.id}
+                isLoggedIn={isLoggedIn}
+              />
             </div>
           </div>
           <Map
             className="offer__map"
-            city={currentOffer.city}
-            offers={[currentOffer, ...nearOffers]}
-            selectedOfferId={id ?? null}
+            city={offer.city}
+            offers={[offer, ...nearbyOffers]}
+            selectedOfferId={id}
           />
           <div className="container">
-            <NearPlacesList offers={nearOffers} />
+            <NearPlacesList offers={nearbyOffers} />
           </div>
         </section>
       </main>

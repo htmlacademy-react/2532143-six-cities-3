@@ -13,9 +13,14 @@ const RATING_TITLES = {
 type RatingItemProps = {
   rating: number
   onRatingChange: (rating: number) => void
+  disabled?: boolean
 }
 
-function RatingItem({ rating, onRatingChange }: RatingItemProps): JSX.Element {
+function RatingItem({
+  rating,
+  onRatingChange,
+  disabled = false,
+}: RatingItemProps): JSX.Element {
   return (
     <div className="reviews__rating-form form__rating">
       {RATING_VALUES.map((value) => (
@@ -27,6 +32,7 @@ function RatingItem({ rating, onRatingChange }: RatingItemProps): JSX.Element {
             id={`${value}-stars`}
             type="radio"
             checked={rating === value}
+            disabled={disabled}
             onChange={() => onRatingChange(value)}
           />
           <label
