@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { Offers } from '@/types/offers'
 import { authSlice } from '../auth/auth-slice'
 import { logout } from '../auth/api-actions'
-import { fetchFavoriteOffers, toggleFavoriteOffer } from './api-actions'
+import { fetchFavoriteOffers } from './api-actions'
+import { toggleFavoriteOffer } from './toggle-favorite-offer'
 
 export type FavoritesState = {
   items: Offers

@@ -1,8 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { OfferDetail } from '@/types/offer-detail'
 import type { OffersListItem } from '@/types/offers'
 import type { ReviewsItem } from '@/types/reviews'
-import { toggleFavoriteOffer } from '../favorites/api-actions'
 import { fetchOfferPageData, postOfferComment } from './api-actions'
 
 export type OfferPageSendReviewStatus = 'idle' | 'pending' | 'success' | 'error'
@@ -33,6 +32,19 @@ export const offerPageSlice = createSlice({
   reducers: {
     resetOfferPage() {
       return { ...initialState }
+    },
+    replaceOffer(
+      state,
+      action: PayloadAction<{
+        offer: OfferDetail
+        nearby: OffersListItem[]
+      }>,
+    ) {
+      state.offer = action.payload.offer
+      state.nearbyOffers = action.payload.nearby
+    },
+    replaceNearby(state, action: PayloadAction<{ nearby: OffersListItem[] }>) {
+      state.nearbyOffers = action.payload.nearby
     },
   },
   extraReducers(builder) {
@@ -70,18 +82,9 @@ export const offerPageSlice = createSlice({
       .addCase(postOfferComment.rejected, (state) => {
         state.sendReviewStatus = 'error'
       })
-      .addCase(toggleFavoriteOffer.fulfilled, (state, action) => {
-        const patch = action.payload.offerPagePatch
-        if (patch.skipped) {
-          return
-        }
-        if (patch.nextOpenedOffer) {
-          state.offer = patch.nextOpenedOffer
-        }
-        state.nearbyOffers = patch.nextNearby
-      })
   },
 })
 
-export const { resetOfferPage } = offerPageSlice.actions
+export const { resetOfferPage, replaceOffer, replaceNearby } =
+  offerPageSlice.actions
 export const offerPageReducer = offerPageSlice.reducer

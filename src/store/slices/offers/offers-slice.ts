@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { Offers } from '@/types/offers'
 import { clearAuth } from '../auth/auth-slice'
 import { logout } from '../auth/api-actions'
-import { toggleFavoriteOffer } from '../favorites/api-actions'
+import { toggleFavoriteOffer } from '../favorites/toggle-favorite-offer'
 import { fetchOffers } from './api-actions'
 
 export type OffersSliceState = {
