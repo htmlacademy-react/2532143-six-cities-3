@@ -5,6 +5,8 @@ import type { OfferDetail } from '@/types/offer-detail'
 import type { OffersListItem } from '@/types/offers'
 import type { ReviewsItem } from '@/types/reviews'
 
+const NEARBY_LIMIT = 3
+
 export const fetchOfferPageData = createAsyncThunk<
   {
     offer: OfferDetail
@@ -24,7 +26,7 @@ export const fetchOfferPageData = createAsyncThunk<
       ])
       return {
         offer,
-        nearby,
+        nearby: nearby.slice(0, NEARBY_LIMIT),
         comments,
       }
     } catch (error) {
@@ -36,17 +38,22 @@ export const fetchOfferPageData = createAsyncThunk<
   },
 )
 
+type OfferPageReviewsSubset = {
+  offerPage: { reviews: ReviewsItem[] }
+}
+
 export const postOfferComment = createAsyncThunk<
-  ReviewsItem,
+  ReviewsItem[],
   { offerId: string; comment: string; rating: number },
-  { extra: AxiosInstance }
+  { extra: AxiosInstance; state: OfferPageReviewsSubset }
 >(
   'offerPage/postComment',
-  async ({ offerId, comment, rating }, { extra: api }) => {
+  async ({ offerId, comment, rating }, { extra: api, getState }) => {
     const { data } = await api.post<ReviewsItem>(`/comments/${offerId}`, {
       comment,
       rating,
     })
-    return data
+    const prev = getState().offerPage.reviews
+    return [...prev, data]
   },
 )

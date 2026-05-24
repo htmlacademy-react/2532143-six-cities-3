@@ -1,4 +1,5 @@
 export * from './slices/app/selectors'
 export * from './slices/auth/selectors'
+export * from './slices/favorites/selectors'
 export * from './slices/offers/selectors'
 export * from './slices/offer-page/selectors'

@@ -2,9 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { OfferDetail } from '@/types/offer-detail'
 import type { OffersListItem } from '@/types/offers'
 import type { ReviewsItem } from '@/types/reviews'
+import { toggleFavoriteOffer } from '../favorites/api-actions'
 import { fetchOfferPageData, postOfferComment } from './api-actions'
-
-const NEARBY_LIMIT = 3
 
 export type OfferPageSendReviewStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -50,7 +49,7 @@ export const offerPageSlice = createSlice({
       .addCase(fetchOfferPageData.fulfilled, (state, action) => {
         state.isLoading = false
         state.offer = action.payload.offer
-        state.nearbyOffers = action.payload.nearby.slice(0, NEARBY_LIMIT)
+        state.nearbyOffers = action.payload.nearby
         state.reviews = action.payload.comments
       })
       .addCase(fetchOfferPageData.rejected, (state, action) => {
@@ -66,10 +65,20 @@ export const offerPageSlice = createSlice({
       })
       .addCase(postOfferComment.fulfilled, (state, action) => {
         state.sendReviewStatus = 'success'
-        state.reviews.push(action.payload)
+        state.reviews = action.payload
       })
       .addCase(postOfferComment.rejected, (state) => {
         state.sendReviewStatus = 'error'
+      })
+      .addCase(toggleFavoriteOffer.fulfilled, (state, action) => {
+        const patch = action.payload.offerPagePatch
+        if (patch.skipped) {
+          return
+        }
+        if (patch.nextOpenedOffer) {
+          state.offer = patch.nextOpenedOffer
+        }
+        state.nearbyOffers = patch.nextNearby
       })
   },
 })

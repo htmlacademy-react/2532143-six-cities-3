@@ -1,75 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { AxiosInstance } from 'axios'
-import { isAxiosError } from 'axios'
 import { AuthorizationStatus, TOKEN_STORAGE_KEY } from '@/const'
-import type { AuthInfo, UserData } from '@/types/auth'
+import type { Offers } from '@/types/offers'
+import type { UserData } from '@/types/auth'
+import { checkAuthStatus, login, logout } from './api-actions'
 
 export type AuthState = {
   authorizationStatus: AuthorizationStatus
   user: UserData | null
 }
 
+type OffersSliceSubset = {
+  offers: {
+    offers: Offers
+  }
+}
+
 const initialState: AuthState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
 }
-
-function userFromAuthInfo(info: AuthInfo): UserData {
-  return {
-    name: info.name,
-    avatarUrl: info.avatarUrl,
-    isPro: info.isPro,
-    email: info.email,
-  }
-}
-
-export const checkAuthStatus = createAsyncThunk<
-  UserData | null,
-  void,
-  {
-    extra: AxiosInstance
-    rejectValue: 'unauthorized'
-    state: { auth: AuthState }
-  }
->('sixCities/checkAuth', async (_arg, { extra: api, rejectWithValue }) => {
-  const token = localStorage.getItem(TOKEN_STORAGE_KEY)
-  if (!token) {
-    return null
-  }
-  try {
-    const { data } = await api.get<AuthInfo>('/login')
-    localStorage.setItem(TOKEN_STORAGE_KEY, data.token)
-    return userFromAuthInfo(data)
-  } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
-      localStorage.removeItem(TOKEN_STORAGE_KEY)
-      return rejectWithValue('unauthorized')
-    }
-    throw error
-  }
-})
-
-export const login = createAsyncThunk<
-  UserData,
-  { email: string; password: string },
-  { extra: AxiosInstance }
->('sixCities/login', async ({ email, password }, { extra: api }) => {
-  const { data } = await api.post<AuthInfo>('/login', { email, password })
-  localStorage.setItem(TOKEN_STORAGE_KEY, data.token)
-  return userFromAuthInfo(data)
-})
-
-export const logout = createAsyncThunk<void, void, { extra: AxiosInstance }>(
-  'sixCities/logout',
-  async (_arg, { extra: api }) => {
-    try {
-      await api.delete('/logout')
-    } catch {
-      /* ignore */
-    }
-    localStorage.removeItem(TOKEN_STORAGE_KEY)
-  },
-)
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -116,14 +65,18 @@ export const authSlice = createSlice({
   },
 })
 
-const { resetAuthState } = authSlice.actions
-
-export const clearAuth = createAsyncThunk<void, void>(
-  'sixCities/clearAuth',
-  (_, { dispatch }) => {
-    localStorage.removeItem(TOKEN_STORAGE_KEY)
-    dispatch(resetAuthState())
-  },
-)
+export const clearAuth = createAsyncThunk<
+  { clearedOffers: Offers },
+  void,
+  { state: OffersSliceSubset }
+>('sixCities/clearAuth', (_, { dispatch, getState }) => {
+  localStorage.removeItem(TOKEN_STORAGE_KEY)
+  const clearedOffers = getState().offers.offers.map((offer) => ({
+    ...offer,
+    isFavorite: false,
+  }))
+  dispatch(authSlice.actions.resetAuthState())
+  return { clearedOffers }
+})
 
 export const authReducer = authSlice.reducer

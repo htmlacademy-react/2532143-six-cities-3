@@ -95,7 +95,11 @@ function OfferPage(): JSX.Element {
               {offer.isPremium && <Badge type="offer" text="Premium" />}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
-                <FavoritesButton type="offer" cardType="offer" />
+                <FavoritesButton
+                  variant="offer"
+                  offerId={offer.id}
+                  isFavorite={offer.isFavorite}
+                />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">

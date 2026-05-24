@@ -32,7 +32,7 @@ function useMap(
       setMap(instance)
       isRenderedRef.current = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- инициализация один раз; центр при смене города — ниже
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapRef])
 
   useEffect(() => {

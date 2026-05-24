@@ -77,7 +77,11 @@ function Card({
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <FavoritesButton type="place-card" cardType={cardType} />
+          <FavoritesButton
+            variant="place-card"
+            offerId={id}
+            isFavorite={offer.isFavorite}
+          />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

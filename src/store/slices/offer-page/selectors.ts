@@ -3,11 +3,9 @@ import type { RootState } from '@/store/root-reducer'
 
 const REVIEWS_DISPLAY_LIMIT = 10
 
-/** Raw reviews in state (unordered; server/API order preserved). */
 export const selectOfferPageReviewsRaw = (state: RootState) =>
   state.offerPage.reviews
 
-/** Newest first, limited for display (derived in selector, not in reducer). */
 export const selectOfferPageReviews = createSelector(
   [selectOfferPageReviewsRaw],
   (reviews) =>
