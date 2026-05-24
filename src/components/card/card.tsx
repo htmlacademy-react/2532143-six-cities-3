@@ -88,7 +88,9 @@ function Card({
         <h2 className="place-card__name">
           <Link to={generatePath(AppRoute.Offer, { id })}>{title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type">
+          {type.charAt(0).toUpperCase() + type.slice(1)}
+        </p>
       </div>
     </article>
   )

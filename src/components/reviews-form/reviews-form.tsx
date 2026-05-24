@@ -2,7 +2,8 @@ import { FormEvent, useState } from 'react'
 import { isAxiosError } from 'axios'
 import { RatingItem } from '@/components/rating-item'
 import { postOfferComment } from '@/store/reducer'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { selectOfferPageSendReviewStatus } from '@/store/selectors'
 
 const MIN_COMMENT_LENGTH = 50
 const MAX_COMMENT_LENGTH = 300
@@ -13,11 +14,13 @@ type ReviewsFormProps = {
 
 function ReviewsForm({ offerId }: ReviewsFormProps): JSX.Element {
   const dispatch = useAppDispatch()
+  const sendReviewStatus = useAppSelector(selectOfferPageSendReviewStatus)
+
   const [comment, setComment] = useState('')
   const [rating, setRating] = useState(0)
-  const [isSending, setIsSending] = useState(false)
   const [errorText, setErrorText] = useState<string | null>(null)
 
+  const isSending = sendReviewStatus === 'pending'
   const commentOk =
     comment.length >= MIN_COMMENT_LENGTH && comment.length <= MAX_COMMENT_LENGTH
   const ratingOk = rating >= 1 && rating <= 5
@@ -30,7 +33,6 @@ function ReviewsForm({ offerId }: ReviewsFormProps): JSX.Element {
     }
 
     setErrorText(null)
-    setIsSending(true)
 
     dispatch(postOfferComment({ offerId, comment, rating }))
       .unwrap()
@@ -49,9 +51,6 @@ function ReviewsForm({ offerId }: ReviewsFormProps): JSX.Element {
           return
         }
         setErrorText('Не удалось отправить отзыв')
-      })
-      .finally(() => {
-        setIsSending(false)
       })
   }
 

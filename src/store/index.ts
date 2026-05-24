@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { isAxiosError } from 'axios'
 import { createAPI } from '@/api'
 import { TOKEN_STORAGE_KEY } from '@/const'
-import { clearAuth } from './slices/auth-slice'
+import { clearAuth } from './slices/auth'
 import { rootReducer } from './root-reducer'
 
 export type { RootState } from './root-reducer'

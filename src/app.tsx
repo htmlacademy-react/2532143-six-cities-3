@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, BrowserRouter, Routes } from 'react-router-dom'
+import { Navigate, Route, BrowserRouter, Routes } from 'react-router-dom'
 import { MainPage } from '@/pages/main-page/main-page'
 import ErrorPage from '@/pages/error-page'
 import { AppRoute } from './const'
@@ -33,7 +33,8 @@ function App(): JSX.Element {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<ErrorPage />} />
+        <Route path={AppRoute.NotFound} element={<ErrorPage />} />
+        <Route path="*" element={<Navigate to={AppRoute.NotFound} replace />} />
       </Routes>
     </BrowserRouter>
   )

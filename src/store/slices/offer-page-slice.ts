@@ -15,6 +15,7 @@ export type OfferPageState = {
   isLoading: boolean
   isNotFound: boolean
   hasError: boolean
+  sendReviewStatus: 'success' | 'error' | 'idle' | 'pending'
 }
 
 const initialState: OfferPageState = {
@@ -24,11 +25,12 @@ const initialState: OfferPageState = {
   isLoading: false,
   isNotFound: false,
   hasError: false,
+  sendReviewStatus: 'idle',
 }
 
 function sortReviewsNewestFirst(items: ReviewsItem[]): ReviewsItem[] {
-  return [...items]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return items
+    .toSorted((a: ReviewsItem, b: ReviewsItem) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, REVIEWS_LIMIT)
 }
 
