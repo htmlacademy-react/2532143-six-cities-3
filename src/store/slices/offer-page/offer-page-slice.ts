@@ -3,6 +3,7 @@ import type { OfferDetail } from '@/types/offer-detail'
 import type { OffersListItem } from '@/types/offers'
 import type { ReviewsItem } from '@/types/reviews'
 import { fetchOfferPageData, postOfferComment } from './api-actions'
+import { sortReviewsNewestFirst } from './sort-reviews'
 
 export type OfferPageSendReviewStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -62,7 +63,7 @@ export const offerPageSlice = createSlice({
         state.isLoading = false
         state.offer = action.payload.offer
         state.nearbyOffers = action.payload.nearby
-        state.reviews = action.payload.comments
+        state.reviews = sortReviewsNewestFirst(action.payload.comments)
       })
       .addCase(fetchOfferPageData.rejected, (state, action) => {
         state.isLoading = false

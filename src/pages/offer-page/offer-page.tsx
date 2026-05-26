@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useEffect } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
 import { Badge } from '@/components/badge'
 import { FavoritesButton } from '@/components/favorites-button'
 import { Header } from '@/components/header'
@@ -40,6 +40,7 @@ function hostToReviewsStub(host: OfferHost): ReviewsItem {
 
 function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch()
+  const location = useLocation()
   const { id } = useParams<{ id: string }>()
   const offer = useAppSelector(selectOfferPageOffer)
   const nearbyOffers = useAppSelector(selectOfferPageNearby)
@@ -55,7 +56,8 @@ function OfferPage(): JSX.Element {
     return () => {
       dispatch(resetOfferPage())
     }
-  }, [dispatch, id])
+    // New location.key after cy.visit so intercepts see fresh GETs in e2e.
+  }, [dispatch, id, location.key])
 
   if (!id) {
     return <ErrorPage />
@@ -103,7 +105,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <Rating rating={offer.rating} />
+                  <Rating rating={offer.rating} variant="offer" />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">

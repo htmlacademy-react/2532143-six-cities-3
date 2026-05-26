@@ -54,6 +54,6 @@ export const postOfferComment = createAsyncThunk<
       rating,
     })
     const prev = getState().offerPage.reviews
-    return [...prev, data]
+    return [data, ...prev]
   },
 )

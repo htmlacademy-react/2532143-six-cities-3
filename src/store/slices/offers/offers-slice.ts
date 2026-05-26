@@ -43,6 +43,12 @@ export const offersSlice = createSlice({
       .addCase(toggleFavoriteOffer.fulfilled, (state, action) => {
         state.offers = action.payload.catalogOffers
       })
+      .addCase(logout.pending, (state) => {
+        state.offers = state.offers.map((offer) => ({
+          ...offer,
+          isFavorite: false,
+        }))
+      })
       .addCase(logout.fulfilled, (state, action) => {
         state.offers = action.payload
       })

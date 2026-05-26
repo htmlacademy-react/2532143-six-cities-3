@@ -55,7 +55,9 @@ function Map({
     }
   }, [map, offers, selectedOfferId])
 
-  return <section ref={mapRef} className={clsx(className)}></section>
+  return (
+    <section ref={mapRef} className={clsx('map', className)}></section>
+  )
 }
 
 export { Map }

@@ -58,6 +58,10 @@ export const authSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.Auth
         state.user = action.payload
       })
+      .addCase(logout.pending, (state) => {
+        state.authorizationStatus = AuthorizationStatus.NoAuth
+        state.user = null
+      })
       .addCase(logout.fulfilled, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth
         state.user = null

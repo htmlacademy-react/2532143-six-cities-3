@@ -52,6 +52,9 @@ export const favoritesSlice = createSlice({
       .addCase(toggleFavoriteOffer.rejected, (state) => {
         state.favoriteRequestOfferId = null
       })
+      .addCase(logout.pending, (state) => {
+        resetFavoriteItems(state)
+      })
       .addCase(logout.fulfilled, (state) => {
         resetFavoriteItems(state)
       })

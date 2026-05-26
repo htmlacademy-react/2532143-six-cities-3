@@ -36,8 +36,3 @@ export const selectSortedOffersInCurrentCity = createSelector(
   [selectOffersInCurrentCity, selectSort],
   (offers, sort) => sortOffers(offers, sort),
 )
-
-export const selectFavoriteOffersCount = createSelector(
-  selectOffers,
-  (offers) => offers.filter((offer) => offer.isFavorite).length,
-)

@@ -84,7 +84,6 @@ function ReviewsForm({ offerId }: ReviewsFormProps): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
         disabled={isSending}
-        maxLength={MAX_COMMENT_LENGTH}
         onChange={(evt) => setComment(evt.target.value)}
       />
       <div className="reviews__button-wrapper">

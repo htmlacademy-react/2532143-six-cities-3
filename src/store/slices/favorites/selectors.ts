@@ -11,3 +11,6 @@ export const selectHasFavoritesLoadError = (state: RootState) =>
 
 export const selectFavoriteRequestOfferId = (state: RootState) =>
   state.favorites.favoriteRequestOfferId
+
+export const selectFavoriteOffersCount = (state: RootState) =>
+  state.favorites.items.length

@@ -1,18 +1,11 @@
-import { createSelector } from '@reduxjs/toolkit'
 import type { RootState } from '@/store/root-reducer'
-
-const REVIEWS_DISPLAY_LIMIT = 10
 
 export const selectOfferPageReviewsRaw = (state: RootState) =>
   state.offerPage.reviews
 
-export const selectOfferPageReviews = createSelector(
-  [selectOfferPageReviewsRaw],
-  (reviews) =>
-    [...reviews]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, REVIEWS_DISPLAY_LIMIT),
-)
+/** Full list in store order (sorted by date on load; new reviews prepended). */
+export const selectOfferPageReviews = (state: RootState) =>
+  state.offerPage.reviews
 
 export const selectOfferPageOffer = (state: RootState) => state.offerPage.offer
 

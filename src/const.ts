@@ -17,6 +17,9 @@ export enum AuthorizationStatus {
 
 export const TOKEN_STORAGE_KEY = 'six-cities-token'
 
+/** Max reviews rendered in the list (Academy / e2e). Total count is still full length. */
+export const OFFER_REVIEWS_DISPLAY_LIMIT = 10
+
 export const URL_MARKER_DEFAULT = '/img/pin.svg'
 export const URL_MARKER_CURRENT = '/img/pin-active.svg'
 
