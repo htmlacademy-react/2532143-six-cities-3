@@ -1,5 +1,6 @@
 import { Card } from '@/components/card'
 import { Offers } from '@/types/offers'
+import { memo } from 'react'
 
 type OffersListProps = {
   offers: Offers
@@ -27,4 +28,7 @@ function MainList({
   )
 }
 
-export { MainList }
+const MainListMemo = memo(MainList)
+MainListMemo.displayName = 'MainListMemo'
+
+export { MainListMemo as MainList }

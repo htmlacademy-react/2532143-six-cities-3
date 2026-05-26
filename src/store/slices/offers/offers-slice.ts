@@ -1,10 +1,9 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from '@reduxjs/toolkit'
-import type { AxiosInstance } from 'axios'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { Offers } from '@/types/offers'
+import { clearAuth } from '../auth/auth-slice'
+import { logout } from '../auth/api-actions'
+import { toggleFavoriteOffer } from '../favorites/toggle-favorite-offer'
+import { fetchOffers } from './api-actions'
 
 export type OffersSliceState = {
   offers: Offers
@@ -17,15 +16,6 @@ const initialState: OffersSliceState = {
   isOffersLoading: true,
   hasOffersLoadError: false,
 }
-
-export const fetchOffers = createAsyncThunk<
-  Offers,
-  void,
-  { extra: AxiosInstance }
->('sixCities/fetchOffers', async (_arg, { extra: api }) => {
-  const { data } = await api.get<Offers>('/offers')
-  return data
-})
 
 export const offersSlice = createSlice({
   name: 'offers',
@@ -49,6 +39,15 @@ export const offersSlice = createSlice({
       .addCase(fetchOffers.rejected, (state) => {
         state.isOffersLoading = false
         state.hasOffersLoadError = true
+      })
+      .addCase(toggleFavoriteOffer.fulfilled, (state, action) => {
+        state.offers = action.payload.catalogOffers
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.offers = action.payload
+      })
+      .addCase(clearAuth.fulfilled, (state, action) => {
+        state.offers = action.payload.clearedOffers
       })
   },
 })

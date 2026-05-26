@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { Badge } from '@/components/badge'
 import { FavoritesButton } from '@/components/favorites-button'
 import { Header } from '@/components/header'
@@ -14,18 +14,16 @@ import { Rating } from '@/components/rating'
 import { Spinner } from '@/components/spinner'
 import spinnerStyles from '@/components/spinner/spinner.module.css'
 import { User } from '@/components/user'
-import { AuthorizationStatus } from '@/const'
+import { AppRoute } from '@/const'
 import ErrorPage from '@/pages/error-page/'
 import { fetchOfferPageData, resetOfferPage } from '@/store/reducer'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
-  selectAuthorizationStatus,
   selectOfferPageError,
   selectOfferPageLoading,
   selectOfferPageNearby,
   selectOfferPageNotFound,
   selectOfferPageOffer,
-  selectOfferPageReviews,
 } from '@/store/selectors'
 import type { OfferHost } from '@/types/offer-detail'
 import type { ReviewsItem } from '@/types/reviews'
@@ -45,17 +43,15 @@ function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>()
   const offer = useAppSelector(selectOfferPageOffer)
   const nearbyOffers = useAppSelector(selectOfferPageNearby)
-  const reviews = useAppSelector(selectOfferPageReviews)
   const isLoading = useAppSelector(selectOfferPageLoading)
   const isNotFound = useAppSelector(selectOfferPageNotFound)
   const hasError = useAppSelector(selectOfferPageError)
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus)
 
   useEffect(() => {
     if (!id) {
       return
     }
-    void dispatch(fetchOfferPageData(id))
+    dispatch(fetchOfferPageData(id))
     return () => {
       dispatch(resetOfferPage())
     }
@@ -76,11 +72,14 @@ function OfferPage(): JSX.Element {
     )
   }
 
-  if (isNotFound || hasError || !offer) {
+  if (isNotFound) {
+    return <Navigate to={AppRoute.NotFound} replace />
+  }
+
+  if (hasError || !offer) {
     return <ErrorPage />
   }
 
-  const isLoggedIn = authorizationStatus === AuthorizationStatus.Auth
   const hostStub = hostToReviewsStub(offer.host)
   return (
     <div className="page">
@@ -96,7 +95,11 @@ function OfferPage(): JSX.Element {
               {offer.isPremium && <Badge type="offer" text="Premium" />}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
-                <FavoritesButton type="offer" cardType="offer" />
+                <FavoritesButton
+                  variant="offer"
+                  offerId={offer.id}
+                  isFavorite={offer.isFavorite}
+                />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
@@ -122,11 +125,7 @@ function OfferPage(): JSX.Element {
                   </p>
                 </div>
               </div>
-              <OfferReviews
-                reviews={reviews}
-                offerId={offer.id}
-                isLoggedIn={isLoggedIn}
-              />
+              <OfferReviews offerId={offer.id} />
             </div>
           </div>
           <Map

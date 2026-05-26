@@ -1,20 +1,24 @@
 import { ReviewsForm } from '@/components/reviews-form'
 import { User } from '@/components/user'
-import type { ReviewsItem } from '@/types/reviews'
+import { AuthorizationStatus } from '@/const'
+import { useAppSelector } from '@/store/hooks'
+import {
+  selectAuthorizationStatus,
+  selectOfferPageReviews,
+} from '@/store/selectors'
 import dayjs from 'dayjs'
 import { Rating } from '../rating'
 
 type OfferReviewsProps = {
-  reviews: ReviewsItem[]
   offerId: string
-  isLoggedIn: boolean
 }
 
-function OfferReviews({
-  reviews,
-  offerId,
-  isLoggedIn,
-}: OfferReviewsProps): JSX.Element {
+function OfferReviews({ offerId }: OfferReviewsProps): JSX.Element {
+  const reviews = useAppSelector(selectOfferPageReviews)
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus)
+
+  const isLoggedIn = authorizationStatus === AuthorizationStatus.Auth
+
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">

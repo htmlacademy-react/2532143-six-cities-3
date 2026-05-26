@@ -1,10 +1,10 @@
 import { FavoritesListItem } from '@/components/favorites-list-item'
-import { Offers } from '@/types/offers'
+import type { Offers } from '@/types/offers'
 import { useAppSelector } from '@/store/hooks'
-import { selectOffers } from '@/store/selectors'
+import { selectFavoriteOffersRaw } from '@/store/selectors'
 
 function FavoritesList(): JSX.Element {
-  const offers = useAppSelector(selectOffers)
+  const offers = useAppSelector(selectFavoriteOffersRaw)
 
   const offersByCity = offers.reduce(
     (acc, offer) => {
