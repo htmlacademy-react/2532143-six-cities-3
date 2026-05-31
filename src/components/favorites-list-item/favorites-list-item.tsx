@@ -1,5 +1,7 @@
 import { Card } from '@/components/card'
 import { OffersListItem } from '@/types/offers'
+import clsx from 'clsx'
+import styles from './favorites-list-item.module.css'
 
 type FavoritesListItemProps = {
   cityName: string
@@ -14,9 +16,12 @@ function FavoritesListItem({
     <li className="favorites__locations-items">
       <div className="favorites__locations locations locations--current">
         <div className="locations__item">
-          <a className="locations__item-link" href="#">
+          <button
+            type="button"
+            className={clsx('locations__item-link', styles.cityLabel)}
+          >
             <span>{cityName}</span>
-          </a>
+          </button>
         </div>
       </div>
       <div className="favorites__places">

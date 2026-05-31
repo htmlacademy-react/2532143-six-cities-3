@@ -32,7 +32,7 @@ function OfferReviews({ offerId }: OfferReviewsProps): JSX.Element {
             <div className="reviews__info">
               <div className="reviews__rating rating">
                 <div className="reviews__stars rating__stars">
-                  <Rating rating={reviewsItem.rating} />
+                  <Rating rating={reviewsItem.rating} variant="reviews" />
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>

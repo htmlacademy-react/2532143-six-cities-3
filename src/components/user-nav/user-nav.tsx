@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import clsx from 'clsx'
 import { AppRoute, AuthorizationStatus } from '@/const'
 import { logout } from '@/store/reducer'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -7,6 +8,7 @@ import {
   selectFavoriteOffersCount,
   selectUser,
 } from '@/store/selectors'
+import styles from './user-nav.module.css'
 
 function UserNav(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -14,8 +16,7 @@ function UserNav(): JSX.Element {
   const user = useAppSelector(selectUser)
   const favoritesCount = useAppSelector(selectFavoriteOffersCount)
 
-  const handleSignOut = (evt: React.MouseEvent<HTMLAnchorElement>) => {
-    evt.preventDefault()
+  const handleSignOut = () => {
     void dispatch(logout())
   }
 
@@ -27,7 +28,10 @@ function UserNav(): JSX.Element {
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item">
-            <Link className="header__nav-link" to={AppRoute.Login}>
+            <Link
+              className="header__nav-link header__nav-link--profile"
+              to={AppRoute.Login}
+            >
               <span className="header__login">Sign in</span>
             </Link>
           </li>
@@ -52,9 +56,13 @@ function UserNav(): JSX.Element {
           </Link>
         </li>
         <li className="header__nav-item">
-          <a className="header__nav-link" href="#" onClick={handleSignOut}>
+          <button
+            type="button"
+            className={clsx('header__nav-link', styles.signOutLink)}
+            onClick={handleSignOut}
+          >
             <span className="header__signout">Sign out</span>
-          </a>
+          </button>
         </li>
       </ul>
     </nav>

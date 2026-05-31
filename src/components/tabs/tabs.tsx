@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { City } from '@/types/offers'
 import { useAppDispatch } from '@/store/hooks'
 import { changeCity } from '@/store/reducer'
+import styles from './tabs.module.css'
 
 type TabsProps = {
   cities: City[]
@@ -23,20 +24,20 @@ function Tabs({ cities, activeCityName }: TabsProps): JSX.Element {
 
             return (
               <li className="locations__item" key={city.name}>
-                <a
+                <button
+                  type="button"
                   className={clsx(
                     'locations__item-link',
                     'tabs__item',
+                    styles.tabLink,
                     isActive && 'tabs__item--active',
                   )}
-                  href="#"
-                  onClick={(event) => {
-                    event.preventDefault()
+                  onClick={() => {
                     handleCityChange(city)
                   }}
                 >
                   <span>{city.name}</span>
-                </a>
+                </button>
               </li>
             )
           })}

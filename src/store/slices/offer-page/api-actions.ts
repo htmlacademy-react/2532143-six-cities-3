@@ -10,7 +10,7 @@ const NEARBY_LIMIT = 3
 export const fetchOfferPageData = createAsyncThunk<
   {
     offer: OfferDetail
-    nearby: OffersListItem[]
+    nearbyOffers: OffersListItem[]
     comments: ReviewsItem[]
   },
   string,
@@ -20,13 +20,13 @@ export const fetchOfferPageData = createAsyncThunk<
   async (offerId, { extra: api, rejectWithValue }) => {
     try {
       const { data: offer } = await api.get<OfferDetail>(`/offers/${offerId}`)
-      const [{ data: nearby }, { data: comments }] = await Promise.all([
+      const [{ data: nearbyOffers }, { data: comments }] = await Promise.all([
         api.get<OffersListItem[]>(`/offers/${offerId}/nearby`),
         api.get<ReviewsItem[]>(`/comments/${offerId}`),
       ])
       return {
         offer,
-        nearby: nearby.slice(0, NEARBY_LIMIT),
+        nearbyOffers: nearbyOffers.slice(0, NEARBY_LIMIT),
         comments,
       }
     } catch (error) {

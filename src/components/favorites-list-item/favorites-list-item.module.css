@@ -1,0 +1,11 @@
+.cityLabel {
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: default;
+  padding: 0;
+  text-decoration: none;
+}
