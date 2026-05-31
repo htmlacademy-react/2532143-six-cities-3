@@ -2,6 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { OfferDetail } from '@/types/offer-detail'
 import type { OffersListItem } from '@/types/offers'
 import type { ReviewsItem } from '@/types/reviews'
+import { clearAuth } from '../auth/auth-slice'
+import { logout } from '../auth/api-actions'
 import { fetchOfferPageData, postOfferComment } from './api-actions'
 
 export type OfferPageSendReviewStatus = 'idle' | 'pending' | 'success' | 'error'
@@ -26,6 +28,13 @@ const initialState: OfferPageState = {
   sendReviewStatus: 'idle',
 }
 
+function resetOfferPageAuthData(state: OfferPageState) {
+  state.offer = null
+  state.nearbyOffers = []
+  state.reviews = []
+  state.sendReviewStatus = 'idle'
+}
+
 export const offerPageSlice = createSlice({
   name: 'offerPage',
   initialState,
@@ -37,14 +46,17 @@ export const offerPageSlice = createSlice({
       state,
       action: PayloadAction<{
         offer: OfferDetail
-        nearby: OffersListItem[]
+        nearbyOffers: OffersListItem[]
       }>,
     ) {
       state.offer = action.payload.offer
-      state.nearbyOffers = action.payload.nearby
+      state.nearbyOffers = action.payload.nearbyOffers
     },
-    replaceNearby(state, action: PayloadAction<{ nearby: OffersListItem[] }>) {
-      state.nearbyOffers = action.payload.nearby
+    replaceNearby(
+      state,
+      action: PayloadAction<{ nearbyOffers: OffersListItem[] }>,
+    ) {
+      state.nearbyOffers = action.payload.nearbyOffers
     },
   },
   extraReducers(builder) {
@@ -61,7 +73,7 @@ export const offerPageSlice = createSlice({
       .addCase(fetchOfferPageData.fulfilled, (state, action) => {
         state.isLoading = false
         state.offer = action.payload.offer
-        state.nearbyOffers = action.payload.nearby
+        state.nearbyOffers = action.payload.nearbyOffers
         state.reviews = action.payload.comments
       })
       .addCase(fetchOfferPageData.rejected, (state, action) => {
@@ -81,6 +93,12 @@ export const offerPageSlice = createSlice({
       })
       .addCase(postOfferComment.rejected, (state) => {
         state.sendReviewStatus = 'error'
+      })
+      .addCase(logout.fulfilled, (state) => {
+        resetOfferPageAuthData(state)
+      })
+      .addCase(clearAuth.fulfilled, (state) => {
+        resetOfferPageAuthData(state)
       })
   },
 })

@@ -3,7 +3,7 @@ import { City, OffersListItem } from '@/types/offers'
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '@/const'
 import { Icon, layerGroup, Marker } from 'leaflet'
 import { useEffect, useRef } from 'react'
-import useMap from '@/hooks/use-map'
+import { useMap } from '@/hooks'
 
 type MapProps = {
   className?: string

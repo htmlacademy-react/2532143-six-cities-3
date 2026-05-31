@@ -18,7 +18,7 @@ type OfferPageFavoritePatch =
   | {
       skipped: false
       nextOpenedOffer: OfferDetail | null
-      nextNearby: OffersListItem[]
+      nextNearbyOffers: OffersListItem[]
     }
 
 type FavoriteToggleFulfillment = {
@@ -82,13 +82,13 @@ function offerPagePatchFromDetail(
     return { skipped: true }
   }
 
-  const nextNearby = nearbyOffers.map((item) =>
+  const nextNearbyOffers = nearbyOffers.map((item) =>
     item.id === detail.id ? { ...item, isFavorite: detail.isFavorite } : item,
   )
 
   return {
     skipped: false,
-    nextNearby,
+    nextNearbyOffers,
     nextOpenedOffer: offer.id === detail.id ? detail : null,
   }
 }
@@ -114,13 +114,13 @@ export const toggleFavoriteOffer = createAsyncThunk<
         dispatch(
           offerPageSlice.actions.replaceOffer({
             offer: patch.nextOpenedOffer,
-            nearby: patch.nextNearby,
+            nearbyOffers: patch.nextNearbyOffers,
           }),
         )
       } else {
         dispatch(
           offerPageSlice.actions.replaceNearby({
-            nearby: patch.nextNearby,
+            nearbyOffers: patch.nextNearbyOffers,
           }),
         )
       }

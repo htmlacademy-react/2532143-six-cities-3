@@ -6,6 +6,7 @@ import { AppRoute, AuthorizationStatus, CITIES } from '@/const'
 import { changeCity, login } from '@/store/reducer'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectAuthorizationStatus } from '@/store/selectors'
+import styles from './authorization-page.module.css'
 
 type LoginFormValidation = { valid: true } | { valid: false; message: string }
 
@@ -136,16 +137,13 @@ function AuthorizationPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a
-                className="locations__item-link"
-                href="#"
-                onClick={(evt) => {
-                  evt.preventDefault()
-                  handleQuickCity()
-                }}
+              <button
+                type="button"
+                className={`locations__item-link ${styles.cityLink}`}
+                onClick={handleQuickCity}
               >
                 <span>{quickCity.name}</span>
-              </a>
+              </button>
             </div>
           </section>
         </div>

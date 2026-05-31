@@ -27,19 +27,6 @@ export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'top-rated', label: 'Top rated first' },
 ]
 
-export const OFFER_INSIDE_ITEMS = [
-  'Wi-Fi',
-  'Heating',
-  'Kitchen',
-  'Fridge',
-  'Washing machine',
-  'Coffee machine',
-  'Dishwasher',
-  'Towels',
-  'Baby seat',
-  'Cabel TV',
-] as const
-
 export const CITIES: City[] = [
   {
     name: 'Paris',

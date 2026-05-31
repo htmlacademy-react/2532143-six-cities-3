@@ -1,0 +1,11 @@
+.cityLink {
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
